@@ -33,14 +33,7 @@ void generate_random_numbers()
 
 }
 
-
-
-
-
-
-
-
-
+/*Alternative solution*/
 void generate_random_numbers2()
 {
 	int i;
