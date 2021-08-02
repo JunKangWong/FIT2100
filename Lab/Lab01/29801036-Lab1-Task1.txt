@@ -1,0 +1,83 @@
+FIT2100 Lab01
+Name		: Wong Jun Kang
+Student ID	: 29801036
+Tutor		: Dr Ting Tin Tin
+Lab Group	: Wednesday 8am-11am
+ 
+
+
+3.1.1 Task 1.1 (1 mark)
+List all the command lines required for creating the following file hierarchy.
+You can start creating the FIT2100 folder first.
+(i.e. student@fit-vm:~/Desktop$ mkdir FIT2100)
+
+cd Desktop
+mkdir FIT2100; cd FIT2100
+mkdir TUTORIALS
+mkdir LABS; cd LABS
+touch LAB1_Task1_1.txt
+
+
+
+
+3.1.2 Task 1.2 (3 marks)
+Experiment with navigating to the following paths using the cd command. After navigating to each directory, use the ls command to look at the files in that location. Are you able to navigate to all of these paths? 
+Does it matter what working directory you are in before running the cd command?
+
+
+(a) Which of the paths above are absolute, and which of them are relative paths?
+Absolute:
+
+/home/student/Documents
+/ 
+
+
+
+Relative:
+
+FIT2100
+~/Documents/FIT2100
+.
+..
+.././.././home/student
+
+
+
+(b) What are the advantages of using absolute paths over relative paths? Why and when, if ever, would you choose to use relative paths over absolute paths?
+
+i) Via an absolute path, we will be able to access the location of the file anywhere on the device as long as the file we refer to, stays and remains at the same location from the root directory.
+
+ii) Relative paths are more location independent and hence are more “portable”. We should use relative paths when we are delivering/moving documents, toolboxes or data to another user or to another 
+location of our computer, relative paths should be used. Otherwise, the recipient’s computer must have the same directory structure as ours. For example, when we have a program that makes use of a 
+configuration file that is stored alongside the program executable, a relative path would be preferred to be used to refer to the configuration file. This is because when the location of entire program 
+file is changed the location of the configuration file changes together (changes in the location of the file we refers to) and since a relative path is used, the configuration file will still be at the 
+same relative location and can be located by the program, however, it cannot be accessed via an absolute path unless the user updates the file path explicitly.
+
+
+
+(c) Write cd commands that allow you to achieve the following:
+
+- navigate to one directory above the user's home directory
+- no change to your current working directory
+
+i) cd ~/..
+ii) cd .
+
+
+
+(d) To run programs in your current directory, you will need to place a ./ in front of the name of a program. Why is this required? Assuming you have an executable named gcc in your current directory,
+ describe what might happen if we were able to run programs in the current directory without needing to prepend a ./ to the program name.
+ 
+The symbol “./” implies the current working directory. Hence, whenever we run a program we will first put a “./” to locate the current directory (as current directory is not in $PATH) and then run the program. 
+If we are able to run programs in the current directory without needing to prepend a ./ to the program suggests that the program is located in the $PATH and hence we don't need to locate the current directory.
+
+
+
+
+
+
+
+
+
+
+
