@@ -35,7 +35,7 @@ void factorial(int n, int *ptr){
 
 // For personal reference only
 
-/* s
+/*
 
 // Alternative (Bad)
 
