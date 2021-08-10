@@ -53,7 +53,7 @@ void print_output_msg(int matched){
 	if (matched){
 		printf("Both Unitcodes are equivalent.\n");
 	}else{
-		printf("Both Unitcode are not equivalent.\n");
+		printf("Both Unitcodes are not equivalent.\n");
 	}
 }
 
