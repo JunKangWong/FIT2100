@@ -22,7 +22,7 @@ int main(){
 	parallel_computing.FacID = "FIT";
 	parallel_computing.UnitID = 2100;
 	
-	// print output msg based on 
+	// print output msg based on compare_unit_code function
 	print_output_msg(compare_unit_code(operating_system, parallel_computing));
 
 	return 0;
