@@ -42,8 +42,7 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  // loop from i = 3 --> 1 (--> 4 during if condition) --> 2 --> 0 (halts) 
-  // and assign the unitid of eachrec with the corressponding corresponding i values.
+	
   for (i = 1; i >=-2; i --){
 
     // The file offset is set to offset from the beginning of the file.
