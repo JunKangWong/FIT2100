@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>      /* needed for perror function */
-#include <string.h>
 
 #define BUFFER_SIZE 1024
 
