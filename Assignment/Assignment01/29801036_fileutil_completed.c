@@ -299,8 +299,6 @@ void tail(int infile, int outfile, int limit){
 /*Explain the design rationale*/
 int copy_file(int *infile, int *outfile, Copy c){
 
-	bool read_success = true, write_success = true; 
-
 	// open infile for copy
 	if (!open_read_file(infile, c.source)){
 		return 1; 	// error code 1
