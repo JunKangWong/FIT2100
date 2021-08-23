@@ -23,7 +23,7 @@ bool store_str(char **buffer, const char* str, const bool reallocate);
 
 bool get_path(const char *dir, const char *filename, char **path);
 
-bool open_write_file(int *outfile, const char *source);
+bool open_write_file(int *outfile, const char *dest);
 
 bool open_read_file(int *infile, const char *source);
 

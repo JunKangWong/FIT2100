@@ -1,9 +1,27 @@
+/*
+Name			: Wong Jun Kang
+Student ID		: 29801036
+Date created	: 19/08/2021
+Last modified	: 24/08/2021
+
+The c module contains the main logic of fileutil. This module include all the memory
+allocation handling (free()) and ensures that file are closed before exiting the program
+(ensure exits  cleanly.)
+*/
+
 #include "29801036_fileutil.h"
 
-/*Main functions*/
 
+/*
+Main function of fileutil
+
+argc	: argument count input by user in terminal.
+argv	: list of arguments input by user in terminal.
+
+return 	: int 0, indicate successful completion of fileutil
+*/
 int main(int argc, char **argv){
-	Copy c;
+	Copy metadata;
 	int infile, outfile; 
 	int n_val = NUM_OF_LINE;		// number of lines to write to 10 by default.
 	int opt;
@@ -91,13 +109,13 @@ int main(int argc, char **argv){
 	}
 
 	// create inistalise the Copy object and pass into copy file function together with infile and outfile
-	c.source = source_path;
-	c.destination = dest_path;
-	c.limit = n_val;
-	c.tail = opt_L;
+	metadata.source = source_path;
+	metadata.destination = dest_path;
+	metadata.limit = n_val;
+	metadata.tail = opt_L;
 	
 	// perform copy file operations and retrive exit status.
-	exit_status = copy_file(&infile, &outfile, c);
+	exit_status = copy_file(&infile, &outfile, metadata);
 	
 	// free all dynamic arrays in the heap
 	free(source_path);
@@ -110,11 +128,19 @@ int main(int argc, char **argv){
 	
 	// exits program
 	exit(exit_status);
+	
+	return 0;
 }
 
 
-/* Parse Argument Check Functions */
+/* 
+Parse Argument Check Functions
+When the argument format/ input is invalid, this function checks for the reason 
+of failure and output an appropriate error message to stderror accordingly.
 
+opt	: int the option that error arise from.
+
+ */
 void prompt_invalid_arguments(int opt){
 	switch(optopt)
 	{
@@ -137,7 +163,13 @@ void prompt_invalid_arguments(int opt){
 	}
 }
 
+/*
+This function checks if the input path is absolute
 
+path	: const char* that specify the path to be checked.
+
+Return	: bool true if the path is absolute else return false. 
+*/
 bool is_absolute_path(const char *path){
 	if (path[0]!= '/'){
 		const char *errorMsg = "Invalid argument: immediately after -d, a directory path was expected\n";
