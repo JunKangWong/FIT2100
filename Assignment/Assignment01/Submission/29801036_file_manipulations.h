@@ -1,3 +1,13 @@
+/*
+Name			: Wong Jun Kang
+Student ID		: 29801036
+Date created	: 19/08/2021
+Last modified	: 24/08/2021
+
+Header file for 29801036_file_manipulations.c
+
+*/
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/file.h> 		/* change to <sys/fcntl.h> for System V */
