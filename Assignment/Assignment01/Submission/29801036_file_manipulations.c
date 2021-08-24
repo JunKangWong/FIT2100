@@ -17,7 +17,7 @@ openfile functions and copyfile functions.
 
 /*
 
-Given a string and a buffer this function Stores str (String) in to buffer.
+Given a string and a buffer this function Stores str (String) into buffer.
 
 Arguments
 
@@ -248,7 +248,7 @@ void tail(const int infile, const int outfile, const int limit){
 		i--;
 	}
 
-	//after located the start point, write character by character to terminal
+	//after located the start point, write content to outfile.
 	lseek(infile, (long) i+2 * sizeof(char), SEEK_END);
 	lseek(outfile, 0, SEEK_SET);
 	print_all(infile, outfile);

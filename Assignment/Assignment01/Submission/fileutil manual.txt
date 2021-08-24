@@ -1,0 +1,83 @@
+HOW TO COMPILE
+	Place 29801036_fileutil.c, 29801036_file_manipulations.c, 29801036_fileutil.h, 29801036_file_manipulations.h and makefile
+	under the same directory and perform the command "make -f makefile" in the terminal under the same directory.
+
+NAME
+	./fileutil - file utility
+
+SYNOPSIS
+	./fileutil [OPTION]
+	./fileutil -d [destdir] [OPTION] ...
+	./fileutil -n [numlines] [OPTION]...
+	./fileutil -L [tail] [OPTION] ...
+	./fileutil [sourcefile]	[OPTION] ...
+	
+DESCRIPTION
+	./fileutil copies content from sourcefile specified in the source path to the specified destination directory. Content of 
+	the file is copied from the beginning of the file by default. If no destination directory (-d) is specified, the file 
+	content will be displayed to the terminal (stdout).
+
+	sourcefile
+			This argument if specified must be input as the first argument.
+
+	-d, -- destdir
+			destination directory for the sourcefile to be copied/displayed to. If this option is not used, file will be 
+			displayed to the terminal (stdout) by default. Allows the user to input a path for the source file to display/copy.
+			sourcefile must appear immediately after the command (e.g., ./fileutil sourcefile).
+
+	-n, -- numlines
+			number of lines to be copied/displayed to 
+
+	-L, -- tail
+			Makes program to switch to Tail mode where the View/Copy should be performed on the last 10 (or n) lines.
+
+EXAMPLES
+		./fileutil
+		Displays the first 10 lines of the sample.txt file from the current directory
+
+		./fileutil -n 20
+		Displays the first 20 lines of the sample.txt file from the current directory
+
+		./fileutil /home/student/dir1/a.txt -n 20
+		Displays the first 20 lines of the a.txt file
+
+		./fileutil /home/student/dir1/a.txt -d /home/student/dir2/
+		Copy a.txt to dir2 where the newly created a.txt only contains the first 10 lines
+
+		./fileutil /home/student/dir1/a.txt -d /home/student/dir2/ -n 15
+		Copy a.txt to dir2 where the newly created a.txt only contains the first 15 lines
+
+		./fileutil /home/student/dir1/a.txt -d /home/student/dir2 -n 15 -L
+		Copy a.txt to dir2 where the newly created a.txt only contains the last 15 lines
+
+		./fileutil -d /home/student/dir2
+		Copy the first 10 lines of sample.txt from the current directory to dir2
+
+		./fileutil /home/student/dir1/a.txt -d /home/student/dir2 -L
+		Copy a.txt to dir2 where the newly created a.txt only contains the last 10 lines
+
+		./fileutil /home/student/dir1/a.txt -L -n 15 -d /home/student/dir2/
+		Copy a.txt to dir2 where the newly created a.txt only contains the last 15 lines
+
+		./fileutil /home/student/dir1/a.txt -d /home/student/dir2/ -n 15 -L
+		Copy a.txt to dir2 where the newly created a.txt only contains the last 15 lines
+
+OVERVIEW
+	option can be given in any order and sourcefile is optional. A "sample.txt"" file must be placed in the same directory as fileutil.
+	Any non option arguments will be ignored besides sourcefile. If sourcefile is not specified, sample.txt will be used as the sourcefile.
+
+EXIT status:
+	0		if OK,
+	
+	1		if minor problems (e.g., error in opening readonly file, destination directory provided is
+			not absolute).
+
+	2		if serious trouble (e.g., error in opening/creating write file, file with the same filename
+			already exists at destination directory or destination directory does not exist).
+
+AUTHOR
+	Written by Wong Jun Kang.
+
+
+
+
