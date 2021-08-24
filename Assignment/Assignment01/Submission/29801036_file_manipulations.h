@@ -18,6 +18,7 @@ Header file for 29801036_file_manipulations.c
 #include <libgen.h>
 #include <errno.h>
 
+#define BUFFERSIZE 1024
 
 
 typedef struct{
@@ -38,6 +39,8 @@ bool open_write_file(int *outfile, const char *dest);
 bool open_read_file(int *infile, const char *source);
 
 void head(const int infile, const int outfile, const int limit);
+
+void print_all(const int infile, const int outfile);
 
 void tail(const int infile, const int outfile, const int limit);
 

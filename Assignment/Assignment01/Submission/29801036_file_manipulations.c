@@ -251,8 +251,31 @@ void tail(const int infile, const int outfile, const int limit){
 	//after located the start point, write character by character to terminal
 	lseek(infile, (long) i+2 * sizeof(char), SEEK_END);
 	lseek(outfile, 0, SEEK_SET);
-	head(infile, outfile, limit+1);
+	print_all(infile, outfile);
 }
+
+
+/*
+
+Given an infile and an outfile descriptor this file writes the content from the
+infile into the outfile. Unlike head, this function print all content from the 
+file without needing the user to specify any limit. Also, a buffer size of 1024
+was defined for more effective reading and writing (as no line check is required).
+
+Arguments
+infile		: const int file descriptor of file to read
+outfile 	: const int file descriptor of file to write to.
+
+*/
+void print_all(const int infile, const int outfile){
+	int n = 0;
+	char buffer[BUFFERSIZE];
+
+	//read() returns the number of byte read
+   	while((n = read(infile, buffer, BUFFERSIZE)) > 0){
+     	write(outfile, buffer, n);
+   }
+}  
 
 
 
