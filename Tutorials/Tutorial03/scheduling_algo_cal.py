@@ -65,18 +65,24 @@ def cal_avg_seek_length(lst:list):
 
 
 def display_all(start:int, lst:list, direction:bool):
-    ssh = cal_ssh_seq(start, list1)
-    elevator = cal_elevator_seq(start, list1, direction)
-    c_scan = cal_c_scan(start, list1, direction)
+    ssh = cal_ssh_seq(start, lst)
+    elevator = cal_elevator_seq(start, lst, direction)
+    c_scan = cal_c_scan(start, lst, direction)
     
+    print("\nFirst Come First Serve (FCFS)")
     fcfs_avg = cal_avg_seek_length(lst)
-    ssh_avg = cal_avg_seek_length(ssh)
-    elevator_avg = cal_avg_seek_length(elevator)
-    c_scan_avg = cal_avg_seek_length(c_scan)
-    
     print("FCFS    : ", lst, fcfs_avg)
+    
+    print("\nShortest Seek First (SSF)")
+    ssh_avg = cal_avg_seek_length(ssh)
     print("SSF     : ", ssh, ssh_avg)
+    
+    print("\nElevator")
+    elevator_avg = cal_avg_seek_length(elevator)
     print("Elevator: ", elevator, elevator_avg)
+    
+    print("\nCircular Scan (C-Scan)")
+    c_scan_avg = cal_avg_seek_length(c_scan)
     print("C_Scan  : ", c_scan, c_scan_avg)
     
 
@@ -84,10 +90,15 @@ def display_all(start:int, lst:list, direction:bool):
 if __name__ == "__main__":
 
    # nump1 = np.array([125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133])
-    list1 = [125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133]
+    #list1 = [89, 125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133]
+    list2 = [125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133]
     start = 89
     
-    display_all(start, list1, False)
+    print("Test1")
+    #display_all(start, list1, False)
+    print()
+    print("Test2")
+    display_all(start, list2, False)
 
     
     
