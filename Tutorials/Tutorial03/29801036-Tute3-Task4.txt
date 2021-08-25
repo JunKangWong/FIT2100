@@ -1,0 +1,82 @@
+4.2 Problem-Solving Tasks (8 marks)
+
+4.2.1 Task 1 (4 marks)
+Imagine a program that works with data files, where each file consists of fixed-size data records of 128 bytes each. 
+
+A total of 2,500,000 such records need to be stored on disk. Assuming the disk has 4096 bytes per sector, 63 sectors 
+per track, 90 tracks per surface, and 4 usable surfaces, how many of the following will be required to store all records? 
+
+Program		:	1 file → 128 bytes
+				2,500,000 files * 128 bytes
+				= 320,000,000 bytes of data
+
+Disk		:	1 sector → 4096 bytes
+				63 sectors / track
+				63 sectors / track * 90 tracks → 1 surface
+				63 sectors / track * 90 tracks * 4 usable surfaces
+
+Sectors
+	(2,500,000 files * 128 bytes) / (4096 bytes)
+	= 320,000,000 bytes / 4096 bytes
+	= 78,125 sectors
+ 
+Tracks
+	78,125 sectors / 63 sectors
+	= 1240.7936508.. tracks
+	= 1241 tracks
+
+Surfaces
+	1241 tracks/ 90 tracks
+	=  13.7888888.. surfaces
+	= 14 surfaces
+
+Disks 
+	14 surfaces / 4 surfaces
+	= 3.5 disks
+	= 4 disks
+
+
+
+4.2.2 Task 2 (4 marks)
+Assume that the disk head is initially positioned on track 89 and is moving in the direction of decreasing track number. 
+For the following sequence of disk track requests:
+
+							125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133
+							
+
+(a) Describe or trace the order in which these requests are served based on the following four disk scheduling algorithms: 
+
+Order of request served:
+
+FCFS
+{89, 125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133}
+
+
+SSF
+{89, 89, 112, 125, 133, 137, 164, 190, 56, 38, 15, 12}
+
+
+Elevator
+{89, 89, 56, 38, 15, 12, 112, 125, 133, 137, 164, 190}
+
+
+C-SCAN
+{89, 89, 56, 38, 15, 12, 190, 164, 137, 133, 125, 112}
+
+
+
+(b) Calculate the average seek length (in terms of the number of tracks traversed) for each of the disk scheduling algorithms.
+
+Average Seek Length:
+
+FCFS
+71.27272727272727
+
+SSF
+25.363636363636363
+
+Elevator
+23.181818181818183
+
+C-SCAN
+30.272727272727273
