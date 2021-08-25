@@ -7,6 +7,11 @@ Created on Tue Aug 24 17:09:29 2021
 from math import inf
 
 
+def cal_fcfs(start: int, numlst: list):
+    lst = numlst[::]
+    return lst, cal_avg_seek_length(lst)
+
+
 # naive_version
 def cal_ssh_seq(start:int, numlst:list):
     res, current = [], start
@@ -27,32 +32,23 @@ def cal_ssh_seq(start:int, numlst:list):
         index = get_closest(current, lst)
         current = lst.pop(index)
         res.append(current)
-        
-    return res
-
-
-
-
-def cal_elevator_seq(start:int, numlst:list, direction:bool):
-    if(direction):
-        lst = sorted(numlst[::])
-    else:
-        lst = sorted(numlst[::], reverse=True)
-        
-    start_i = lst.index(start) 
-
-    return lst[start_i:] + lst[start_i-1::-1]
-
-
-def cal_c_scan(start:int, numlst:list, direction:bool):
-    if(direction):
-        lst = sorted(numlst[::])
-    else:
-        lst = sorted(numlst[::], reverse=True)
-        
-    start_i = lst.index(start) 
     
-    return lst[start_i:] + lst[:start_i]
+        
+    return res, cal_avg_seek_length(res)
+
+
+def cal_elevator_seq(start:int, numlst:list, reverse:bool):
+    lst = sorted(numlst[::], reverse=reverse) 
+    start_i = lst.index(start)
+    res = lst[start_i:] + lst[start_i-1::-1]
+    return res, cal_avg_seek_length(res)
+
+
+def cal_c_scan(start:int, numlst:list, reverse:bool):
+    lst = sorted(numlst[::], reverse=reverse)
+    start_i = lst.index(start)
+    res = lst[start_i:] + lst[:start_i]
+    return res, cal_avg_seek_length(res)
 
 
 def cal_avg_seek_length(lst:list):
@@ -64,41 +60,36 @@ def cal_avg_seek_length(lst:list):
     return res/(len(lst)-1)
 
 
-def display_all(start:int, lst:list, direction:bool):
-    ssh = cal_ssh_seq(start, lst)
-    elevator = cal_elevator_seq(start, lst, direction)
-    c_scan = cal_c_scan(start, lst, direction)
-    
+def display_all(start:int, lst:list, reverse:bool):
     print("\nFirst Come First Serve (FCFS)")
-    fcfs_avg = cal_avg_seek_length(lst)
-    print("FCFS    : ", lst, fcfs_avg)
+    fcfs = cal_fcfs(start, lst)
+    print("FCFS    : ", fcfs[0], fcfs[1])
     
     print("\nShortest Seek First (SSF)")
-    ssh_avg = cal_avg_seek_length(ssh)
-    print("SSF     : ", ssh, ssh_avg)
+    ssh = cal_ssh_seq(start, lst)
+    print("SSF     : ", ssh[0], ssh[1])
     
     print("\nElevator")
-    elevator_avg = cal_avg_seek_length(elevator)
-    print("Elevator: ", elevator, elevator_avg)
+    elevator = cal_elevator_seq(start, lst, reverse)
+    print("Elevator: ", elevator[0], elevator[1])
     
     print("\nCircular Scan (C-Scan)")
-    c_scan_avg = cal_avg_seek_length(c_scan)
-    print("C_Scan  : ", c_scan, c_scan_avg)
+    c_scan = cal_c_scan(start, lst, reverse)
+    print("C_Scan  : ", c_scan[0], c_scan[1])
     
 
 
 if __name__ == "__main__":
 
-   # nump1 = np.array([125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133])
-    #list1 = [89, 125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133]
+    list1 = [89, 125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133]
     list2 = [125, 112, 15, 190, 137, 56, 12, 89, 38, 164, 133]
     start = 89
     
     print("Test1")
-    #display_all(start, list1, False)
+    display_all(start, list1, True)
     print()
     print("Test2")
-    display_all(start, list2, False)
+    display_all(start, list2, True)
 
     
     
