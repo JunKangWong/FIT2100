@@ -142,7 +142,7 @@ opt	: int the option that error arise from.
 
  */
 void prompt_invalid_arguments(int opt){
-	switch(optopt)
+	switch(opt)
 	{
 		case 'd':
 		{
