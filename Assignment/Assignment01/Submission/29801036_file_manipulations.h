@@ -25,7 +25,7 @@ typedef struct{
 	char *source;
 	char *destination;
 	int limit;
-	bool tail;
+	int tail;
 }Copy;
 
 

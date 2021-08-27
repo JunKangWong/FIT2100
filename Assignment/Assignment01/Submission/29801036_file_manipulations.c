@@ -237,26 +237,25 @@ void tail(const int infile, const int outfile, const int limit){
 	int i = -1, lines = 0;
 	char c;
 	
-	// go through the infile from the end of the file in reverse order until 
-	// lines reaches limit.
-	while(lseek(infile, i * sizeof(char), SEEK_END) != -1 && lines <= limit){
+	// while there is still character to read
+	while(lseek(infile, i * sizeof(char), SEEK_END) != -1){
 		
 		// read character by character
 		read(infile, &c, 1);
 		
 		if (c == '\n') lines ++;
+		if(lines > limit) break; // break early if lines > limit (dont decrement i)
 		i--;
 	}
-
+	
 	//after located the start point, write content to outfile.
-	lseek(infile, (long) i+2 * sizeof(char), SEEK_END);
+	lseek(infile, (long) (i+1)* sizeof(char), SEEK_END);
 	lseek(outfile, 0, SEEK_SET);
 	print_all(infile, outfile);
 }
 
 
 /*
-
 Given an infile and an outfile descriptor this file writes the content from the
 infile into the outfile. Unlike head, this function print all content from the 
 file without needing the user to specify any limit. Also, a buffer size of 1024
