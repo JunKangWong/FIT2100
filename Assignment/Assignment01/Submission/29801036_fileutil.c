@@ -2,7 +2,7 @@
 Name			: Wong Jun Kang
 Student ID		: 29801036
 Date created	: 19/08/2021
-Last modified	: 24/08/2021
+Last modified	: 27/08/2021
 
 The c module contains the main logic of fileutil. This module include all the memory
 allocation handling (free()) and ensures that file are closed before exiting the program
@@ -66,7 +66,7 @@ int main(int argc, char **argv){
 			{
 				// prompt invalid arguments and then
 				// free all allocated malloc pointers and exits.
-				prompt_invalid_arguments(optopt);
+				prompt_invalid_arguments();
 				free(source_path);
 				free(dest_dir);
 				
@@ -137,12 +137,12 @@ int main(int argc, char **argv){
 Parse Argument Check Functions
 When the argument format/ input is invalid, this function checks for the reason 
 of failure and output an appropriate error message to stderror accordingly.
+The invalid argument will be prompted according to the external variable
+optopt.
 
-opt	: int the option that error arise from.
-
- */
-void prompt_invalid_arguments(int opt){
-	switch(opt)
+*/
+void prompt_invalid_arguments(){
+	switch(optopt)
 	{
 		case 'd':
 		{
