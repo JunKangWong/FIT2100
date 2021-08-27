@@ -2,7 +2,7 @@
 Name			: Wong Jun Kang
 Student ID		: 29801036
 Date created	: 19/08/2021
-Last modified	: 24/08/2021
+Last modified	: 27/08/2021
 
 Header file for 29801036_file_manipulations.c
 
@@ -25,7 +25,7 @@ typedef struct{
 	char *source;
 	char *destination;
 	int limit;
-	int tail; // use as bool
+	bool tail;
 }Copy;
 
 

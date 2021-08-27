@@ -25,8 +25,9 @@ int main(int argc, char **argv){
 	int infile, outfile; 
 	int n_val = NUM_OF_LINE;		// number of lines to write to 10 by default.
 	int opt;
-	bool opt_L = false;
 	int exit_status = 0;
+	bool opt_L = false;
+	
 
 	// malloc pointers
 	char *source_path = NULL, *dest_path = NULL, *dest_dir = NULL;
