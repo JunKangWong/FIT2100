@@ -241,4 +241,17 @@ Message from P at the 5th iteration
 Message from P at the 6th iteration
 Message from P at the 7th iteration
 Message from P at the 8th iteration
-Message from P at the 9th iterationS
+Message from P at the 9th iteration
+
+
+Tracking of processes and parent processes until root. 
+
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+4 S     0       <1>       0  0  80   0 - 42006 -      ?        00:00:04 systemd
+4 S  1001    <1501>       <1>  0  80   0 -  7316 ep_pol ?        00:00:00 systemd
+0 R  1001    <4224>    <1501>  0  80   0 - 243503 -     ?        00:00:33 gnome-terminal-
+0 S  1001    <4235>    <4224>  0  80   0 -  4843 do_wai pts/0    00:00:00 bash
+0 R  1001    <8811>    <4235>  0  80   0 -   622 -      pts/0    00:00:00 fork2
+1 S  1001    __8812__    (8811)  0  80   0 -   589 do_wai pts/0    00:00:00 fork2
+
+
