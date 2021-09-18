@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     rc = pthread_create(&thread[i], NULL, print_hello, &threadNum[i]);
     
     if(rc) {    /* could not create thread */
-      printf("\n ERROR: return code from pthread_create is %d by thread %d \n", rc, threadNum[i]);
+      printf("\n ERROR: return code from pthread_create is %d by thread %ld \n", rc, thread[i]);
       exit(1);
     }else{
     	printf("I am thread %ld. Created new thread (%ld) in iteration %d. Current sum: %d\n", pthread_self(), thread[i], i, sum);
