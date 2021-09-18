@@ -1,0 +1,55 @@
+Run the race program 10 times, and briefly answer the following:
+
+(a) Is it possible to get a value less than 48 or more than 52?
+No, none of the execution produced the output of over 52 or smaller than 48.
+theValue can either be 48, 50 or 52. This is because, theValue can either be 
+added by 2, decrement by 2, or both (remain at 50). 
+
+
+(b) What is the purpose of adding random delays between each of the load, increment/decrement
+and save steps in pthread1() and pthread2()?
+To encourage the race condition to happen randomly, such that process 1 wont always run before 
+process 2, hence the answer cannot be guessed and will be non determistic.
+
+
+(c) Can we predict the output on any given run?
+No, since we would not know which thread, pthread1 or pthread2 would run first, 
+and depending on the sequence of execution, we would get different answer, as, 
+both of the threads are accessing, altering and reading the same global at the same time.
+The only thing we can do is to guess the number from 48, 50 and 52.
+
+
+(d) What conditions would need to happen in order to get the expected output of 50?
+When the execution of either of the thread completes before the start of the other thread.
+(happens at mutually exclusive interval)
+
+condition 1
+1) program reads 50 into x from theValue
+2) program adds 2 to x and store 52 into x.
+3) program writes 52 back into theValue
+4) program reads 52 into y from theValue
+5) program deducts 2 from y and store 50 into y.
+6) program writes 50 back into theValue.
+
+condition 2
+1) program reads 50 into y from theValue
+2) program deducts 2 from y and store 48 into y.
+3) program writes 48 back into theValue.
+4) program reads 48 into x from theValue
+5) program adds 2 to x and store 50 into x.
+6) program writes 50 back into theValue
+
+
+
+Wrong condition (where answer wont be 50)
+(When both x and y reads theValue before it is altered by any of the threads the 
+answer will either be 48 or 52 depending on which thread returns last.)
+1) program reads 50 into x from theValue
+2) program reads 50 into y from theValue
+2) program adds 2 to x and store 52 into x.
+5) program deducts 2 from y and store 48 into y.
+3) program writes 52 (x) back into theValue
+6) program writes 48 (y)  back into theValue. (depending on which thread returns 1st)
+
+Final answer: 48
+
