@@ -29,8 +29,8 @@ P4 6 2 2
 /*Special enumerated data type for process state*/
 
 int load_textfile_to_pcb_t_queue(char* filepath, Queue *pcb_t_q);
-//oid first_come_first_serve(Queue *ready, Queue *pcb_t_q);
 void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs);
+void generate_output_file(const char* filepath, Queue *res_queue);
 
 int main(){
 	Queue q1, q2, q3;
@@ -43,27 +43,14 @@ int main(){
 	
 	load_textfile_to_pcb_t_queue("processes.txt", &q1);
 	int count = q1.item_count;
-	
 
-	
 	first_come_first_serve(&q2, &q1, &q3);
-	
-	
-	while(q3.item_count > 0){
-		cur_process = dequeue(&q3);
-		
-		printf("Time: %d. ARRIVE: process_name: %s. arrival_time: %d. service_time: %d\n",
-		cur_process.current_time,
-		cur_process.process_name,
-		cur_process.entryTime,
-		cur_process.serviceTime);
-	
-	}
-	return 0;
+	generate_output_file("output.txt", &q3);
 }
 
 
 /*This function loads data in the text file (in arriving order) into a pcb_t queue.*/
+// change char to const char for consistency
 int load_textfile_to_pcb_t_queue(char* filepath, Queue *pcb_t_q){
 	FILE *fp;
 	char *line = NULL;
@@ -128,19 +115,20 @@ void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs){
 	
 	// make ready queue local?
 
-	// may have some problem such that item count is finished by last item cannot run.
-	
 	// run while there are still process to be run or any remaining process is still running.
 	while(pcb_t_q->item_count > 0 || active_process > 0){
 		
 		// enqueue entry/ arrival process (while loop incase multiple same arrival time)
 		while(pcb_t_q->value[(pcb_t_q->front) + 1].entryTime == current_time){
-
+			
+			// retrieved process from "non_visible queue" and place it into the ready queue.
 			arrive = dequeue(pcb_t_q);
+			arrive.current_time = current_time;
 			enqueue(ready, arrive);
 			active_process ++;
-
-			enqueue(fcfs, arrive);
+			
+			// record arrival event in an array for output purposes.
+			enqueue(fcfs, arrive); 
 		}
 		
 		// if there is process ready for execution and previous process has completed execution
@@ -175,6 +163,32 @@ void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs){
 		current_time ++;
 	}
 }
+
+
+
+void generate_output_file(const char* filepath, Queue *res_queue){
+	FILE *fp;
+	fp = fopen(filepath, "w");
+	pcb_t cur_event;
+	
+	while(res_queue->item_count > 0){
+		cur_event = dequeue(res_queue);
+		
+		switch(cur_event.state){
+			case READY:
+				fprintf(fp, "Time %d: %s has entered the system.\n", cur_event.current_time, cur_event.process_name);
+				break;
+			case RUNNING:
+				fprintf(fp, "Time %d: %s is in the running state.\n", cur_event.current_time, cur_event.process_name);
+				break;
+			case EXIT:
+				fprintf(fp, "TIme %d: %s has finished the running state.\n", cur_event.current_time, cur_event.process_name);
+				break;
+		}
+	}
+	fclose(fp);
+}
+
 
 
 
