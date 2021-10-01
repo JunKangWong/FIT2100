@@ -12,6 +12,7 @@ typedef enum {
 
 typedef struct {
 	char process_name[PROCESS_NAME_SIZE]; // A string that identifies the process
+	int current_time; // current_time when an event occur.
 	
 	/*Time are measured in seconds*/
 	int entryTime;				// The time process entered system
@@ -37,7 +38,7 @@ void enqueue(Queue *q, pcb_t input){
 
 pcb_t dequeue(Queue *q){
 	q->item_count--;
-	return q->value[++q->front];;
+	return q->value[++q->front];
 }
 
 void initialise_queue(Queue *q){

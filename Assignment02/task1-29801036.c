@@ -26,7 +26,20 @@ P4 6 2 2
 .
 .P100 (Maximum)
 */
-/*Special enumerated data type for process state*/
+
+
+/*
+
+To-do:
+- separate a scheduller out from fcfs function
+- seperate load_text_file .. into a smaller function
+- Properly split .h .c files
+- comment the code.
+
+*/
+
+
+
 
 int load_textfile_to_pcb_t_queue(char* filepath, Queue *pcb_t_q);
 void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs);
