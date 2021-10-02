@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include "queue.c"
 
-
-
 /*
 Input filename: processes.txt
 Output filename: result-tasknum.txt
@@ -28,49 +26,51 @@ P4 6 2 2
 */
 
 
-/*
-
-To-do:
-- separate a scheduller out from fcfs function
-- seperate load_text_file .. into a smaller function
-- Properly split .h .c files
-- comment the code.
-
-*/
-
-
-
-
-int load_textfile_to_pcb_t_queue(char* filepath, Queue *pcb_t_q);
-void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs);
+/*Function Prototype*/
+int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q);
+void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs); // this one allow task 3 end and task 2 run immediately.
 void generate_output_file(const char* filepath, Queue *res_queue);
+pcb_t textline_to_pcb_t(char *line);
+
+
 
 int main(){
-	Queue q1, q2, q3;
-	pcb_t memo[MAX_SIZE * 3]; // * 3 as there are 3 types of outputs for each process
 	int i;
-	initialise_queue(&q1);
-	initialise_queue(&q2);
-	initialise_queue(&q3);
 	pcb_t cur_process;
-	
-	load_textfile_to_pcb_t_queue("processes.txt", &q1);
-	int count = q1.item_count;
+	Queue event_occur, event_record;
+	initialise_queue(&event_occur);
+	initialise_queue(&event_record);
 
-	first_come_first_serve(&q2, &q1, &q3);
-	generate_output_file("output.txt", &q3);
+	// load textfile "processes.txt" into event_occur queue for processing.
+	load_textfile_to_pcb_t_queue("processes.txt", &event_occur);
+	
+	// simulates first come first serve process scheduler and record event into event_record queue.
+	first_come_first_serve(&event_occur, &event_record);
+	
+	// generate an output file according to the recorded events in event_record queue.
+	generate_output_file("output.txt", &event_record);
 }
 
 
-/*This function loads data in the text file (in arriving order) into a pcb_t queue.*/
-// change char to const char for consistency
-int load_textfile_to_pcb_t_queue(char* filepath, Queue *pcb_t_q){
+
+
+/*
+This function opens text file in the specified filepath and loads data in the 
+text file (in  sequence of arriving order) into a pcb_t queue.
+
+Argument: 
+
+const char* filepath: filepath of the text file to be loaded pcb_t_q queue.
+Queue *pcb_t_q: Buffer of Queue of structs for the text file to be loaded into.
+
+Return: 0 when file is unsucessfully loaded, else return 1 indicate success.
+*/
+int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q){
 	FILE *fp;
 	char *line = NULL;
-	const char* delimiter = " ";
 	size_t len = 0;
 	ssize_t read;
-	int count;
+
 
 	fp = fopen(filepath, "r");
 	
@@ -80,85 +80,105 @@ int load_textfile_to_pcb_t_queue(char* filepath, Queue *pcb_t_q){
 	}
 
 	while ((read = getline(&line, &len, fp)) != -1){
-	
-		////// break this part into function///////
-		pcb_t process;
-		count = 1;
-		
-		// retrieve first token
-		char *token = strtok(line, delimiter);
-		strcpy(process.process_name, token);
-		process.state = READY; // set default state as READY.
-		
-		//printf("%s", token);
-		while(token != NULL){
-			token = strtok(NULL, " ");
-			
-			switch(count)
-			{
-				case 1: {
-					process.entryTime = atoi(token);
-					//printf("case1: %d\n", atoi(token));
-					break;
-				}case 2: {
-					process.serviceTime = atoi(token);
-					process.remainingTime = atoi(token);
-					break;
-				}case 3: {
-					// do nothing for now
-				}
-			}
-			count ++;
-		}
-		////// break this part into function///////
-		enqueue(pcb_t_q, process);
+		enqueue(pcb_t_q, textline_to_pcb_t(line));
 	}
+	
 	fclose(fp);
 	free(line);
+	return 1;
 }
 
 
 
-void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs){
+/*
+Given a textline in the following format:
+<process_name> <entryTime> <serviceTime> <deadline>
+This function loads the char* line into a pcb_t struct object and return the object.
+
+Argument: 
+char *line:  char* line to be loaded into pcb_t struct object.
+
+Return: pcb_t struct object corresponds to the line.
+*/
+pcb_t textline_to_pcb_t(char *line){
+	int count = 1;
+	const char* delimiter = " ";
+	pcb_t process;
+
+	// retrieve first token
+	char *token = strtok(line, delimiter);
+	strcpy(process.process_name, token);
+	process.state = READY; // set default state as READY.
+
+
+	while(token != NULL){
+		token = strtok(NULL, " ");
+		
+		switch(count)
+		{
+			case 1: {
+				process.entryTime = atoi(token);
+				//printf("case1: %d\n", atoi(token));
+				break;
+			}case 2: {
+				process.serviceTime = atoi(token);
+				process.remainingTime = atoi(token);
+				break;
+			}case 3: {
+			
+			}
+		}
+		count ++;
+	}
+	return process;
+}
+
+
+
+
+/*
+Given a event queue this function simulates event based on the event queue by a time tick
+of 1 second per cycle. This function simulates the first come first serve scheduler 
+behaviour and produce a sequence of pcb_t struct object in order of event occurence into
+the struct queue as a record.
+
+Argument: 
+
+Queue *pcb_t_q,: queue containing the "future" event that will occur.
+Queue *fcfs: queue that records the event occur.
+*/
+void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
+
 	int current_time = 0, service_counter;
 	bool completed = true;
 	int active_process = 0;
 	pcb_t running_process;
 	pcb_t arrive;
 	
-	// make ready queue local?
+	Queue ready;
+	initialise_queue(&ready);
 
 	// run while there are still process to be run or any remaining process is still running.
+	// this outer while loop simulates clock ticks
 	while(pcb_t_q->item_count > 0 || active_process > 0){
-		
+
 		// enqueue entry/ arrival process (while loop incase multiple same arrival time)
 		while(pcb_t_q->value[(pcb_t_q->front) + 1].entryTime == current_time){
 			
 			// retrieved process from "non_visible queue" and place it into the ready queue.
 			arrive = dequeue(pcb_t_q);
 			arrive.current_time = current_time;
-			enqueue(ready, arrive);
+			enqueue(&ready, arrive);
 			active_process ++;
 			
 			// record arrival event in an array for output purposes.
 			enqueue(fcfs, arrive); 
 		}
-		
-		// if there is process ready for execution and previous process has completed execution
-		if(ready->item_count > 0 && completed){
 
-			running_process = dequeue(ready);
-			running_process.state = RUNNING;
-			running_process.current_time = current_time;
-			completed = false;
-
-			// store for output
-			enqueue(fcfs, running_process);
-		}
-		
 		// when there are incompleted process to be completed.
 		if(!completed){
 			//run the process and deduct 1 from the remainingTime
+			running_process.remainingTime = running_process.remainingTime-1;
 			// if process completed running
 			if(running_process.remainingTime == 0){
 				running_process.state = EXIT;
@@ -170,15 +190,35 @@ void first_come_first_serve(Queue *ready, Queue *pcb_t_q, Queue *fcfs){
 				enqueue(fcfs, running_process);
 			}
 			// update remaining time.
-			running_process.remainingTime = running_process.remainingTime-1;
+			//running_process.remainingTime = running_process.remainingTime-1;
 		}
-		// + 1 second
+
+		// if there is process ready for execution and previous process has completed execution
+		if(ready.item_count > 0 && completed){
+
+			running_process = dequeue(&ready);
+			running_process.state = RUNNING;
+			running_process.current_time = current_time;
+			completed = false;
+
+			// store for output
+			enqueue(fcfs, running_process);
+		}
+		
+		// + 1 second (clock tick by 1 second)
 		current_time ++;
 	}
 }
 
 
+/*
+Given the event_record queue. This function formats and writes the data in the queue
+into a file as specified in the filepath.
 
+Argument: 
+const char* filepath: filepath to write the text file to.
+Queue *res_queue: queue containing process information to be written into the textfile.
+*/
 void generate_output_file(const char* filepath, Queue *res_queue){
 	FILE *fp;
 	fp = fopen(filepath, "w");
@@ -201,122 +241,6 @@ void generate_output_file(const char* filepath, Queue *res_queue){
 	}
 	fclose(fp);
 }
-
-
-
-
-
-
-
-
-/*
-
-			printf("Time: %d. ARRIVE: process_name: %s. arrival_time: %d. service_time: %d\n",
-			 current_time,
-			 arrive.process_name,
-			 arrive.entryTime,
-			 arrive.serviceTime);
-			
-
-
-
-int load_textfile_to_pcb_t_queue(char* filepath, Queue pcb_t_q){
-	FILE *fp;
-	char *line = NULL;
-	const char* delimiter = " ";
-	size_t len = 0;
-	ssize_t read;
-	int count;
-
-	fp = fopen(filepath, "r");
-	
-	if(fp == NULL) {
-		printf("invalid file path");
-		return 0;
-	}
-
-	while ((read = getline(&line, &len, fp)) != -1){
-	
-		////// break this part into function///////
-		pcb_t process;
-		count = 1;
-		
-		// retrieve first token
-		char *token = strtok(line, delimiter);
-		strcpy(process.process_name, token);
-		process.state = READY;
-		
-		//printf("%s", token);
-		while(token != NULL){
-			token = strtok(NULL, " ");
-			
-			switch(count)
-			{
-				case 1: {
-					process.entryTime = atoi(token);
-					//printf("case1: %d\n", atoi(token));
-					break;
-				}case 2: {
-					process.serviceTime = atoi(token);
-					process.remainingTime = atoi(token);
-					//printf("case2: %d\n", atoi(token));
-					
-					break;
-				}case 3: {
-					// do nothing for now
-				}
-			}
-			count ++;
-		}
-		////// break this part into function///////
-
-		
-		enqueue(&pcb_t_q, process);
-	}
-	fclose(fp);
-	free(line);
-}
-*/
-
-
-
-/*
-int first_come_first_serve(char* filepath){
-	FILE *fp;
-	char *line = NULL;
-	const char* delimiter = " ";
-	size_t len = 0;
-	ssize_t read;
-
-	fp = fopen(filepath, "r");
-	
-	if(fp == NULL) {
-		printf("yes");
-		return 0;
-	}
-	
-	
-	while ((read = getline(&line, &len, fp)) != -1){
-		//printf("%ld", read);
-		//printf("%s", line);
-		
-		// retrieve first token
-		char *token = strtok(line, delimiter);
-		
-		while(token != NULL){
-			printf("%s", token);
-			token = strtok(NULL, delimiter);
-		}
-		
-	}
-	
-	fclose(fp);
-	free(line);
-}
-*/
-
-
-//int load_text_into_queue
 
 
 

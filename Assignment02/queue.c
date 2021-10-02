@@ -1,26 +1,13 @@
+/*
+
+This module is a simple queue(FCFS) implementation implemeted in stack memory.
+
+*/
+
 #include <stdio.h>
+#include "task1-29801036.h"
 
-#define MAX_SIZE 100
-#define PROCESS_NAME_SIZE 11	// assume name of process is never more than 10 characters in length and does not contain spaces
-#define START_TIME 0
-
-/*Special enumerated data type for process state*/
-typedef enum {
-	READY, RUNNING, EXIT
-}process_state_t;
-
-
-typedef struct {
-	char process_name[PROCESS_NAME_SIZE]; // A string that identifies the process
-	int current_time; // current_time when an event occur.
-	
-	/*Time are measured in seconds*/
-	int entryTime;				// The time process entered system
-	int serviceTime;			// The total CPU time required by the process
-	int remainingTime;			// Remaining service time until completion
-	process_state_t state;		// current process state (e.g. READY) as specified in the enum above
-
-}pcb_t;
+#define MAX_SIZE 300
 
 
 typedef struct queue{
@@ -31,51 +18,40 @@ typedef struct queue{
 } Queue;
 
 
+/*
+Given input, this function enqueue/inserts item into the queue and increments the rear pointer.
+
+Argument: 
+Queue *q: Queue which items were to be inserted into.
+pcc_t input: item to be inserted into the Queue.
+
+*/
 void enqueue(Queue *q, pcb_t input){
 	q->item_count ++;
 	q->value[++q->rear] = input;
 }
 
+
+
+/*
+Given the queue object, this function dequeue/pops the item at the front of the queue, then
+increment the front pointer.
+
+Argument:
+Queue *q: Queue where the front object is to be extracted.
+*/
 pcb_t dequeue(Queue *q){
 	q->item_count--;
 	return q->value[++q->front];
 }
 
+
+
+/*
+Given a declared Queue address, this function initialise the Queue into initial setups.
+*/
 void initialise_queue(Queue *q){
 	q->front = -1;
 	q->rear = -1;
 	q->item_count = 0;
 }
-
-/*
-int main(){
-	int i;
-	Queue q;
-	initialise_queue(&q);
-	
-	pcb_t process1;
-	process1.entryTime = 1;
-	process1.serviceTime = 2;
-	process1.remainingTime = 3;
-	process1.state = READY;
-	
-	pcb_t process2;
-	process2.entryTime = 4;
-	process2.serviceTime = 5;
-	process2.remainingTime = 6;
-	process2.state = RUNNING;
-	
-	enqueue(&q, process1);
-	enqueue(&q, process2);
-	
-	int count = q.item_count;
-	
-	for(i = 0; i < count; i++){
-		pcb_t current_process = dequeue(&q);
-		printf("%d\n", current_process.entryTime);
-	}
-
-	
-	return 0;
-}
-*/
