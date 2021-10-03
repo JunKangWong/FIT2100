@@ -30,7 +30,6 @@ P4 6 2 2
 int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q);
 void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs); // this one allow task 3 end and task 2 run immediately.
 void generate_output_file(const char* filepath, Queue *res_queue);
-pcb_t textline_to_pcb_t(char *line);
 
 
 
@@ -70,6 +69,7 @@ int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q){
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;
+	pcb_t proc;
 
 
 	fp = fopen(filepath, "r");
@@ -78,61 +78,17 @@ int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q){
 		printf("invalid file path");
 		return 0;
 	}
-
-	while ((read = getline(&line, &len, fp)) != -1){
-		enqueue(pcb_t_q, textline_to_pcb_t(line));
+	
+	while(fscanf(fp, "%s %d %d %d\n", proc.process_name, &(proc.entryTime), &(proc.serviceTime), &(proc.deadline)) > 0){
+		proc.remainingTime = proc.serviceTime;
+		proc.state = READY;
+		enqueue(pcb_t_q, proc);
 	}
 	
 	fclose(fp);
 	free(line);
 	return 1;
 }
-
-
-
-/*
-Given a textline in the following format:
-<process_name> <entryTime> <serviceTime> <deadline>
-This function loads the char* line into a pcb_t struct object and return the object.
-
-Argument: 
-char *line:  char* line to be loaded into pcb_t struct object.
-
-Return: pcb_t struct object corresponds to the line.
-*/
-pcb_t textline_to_pcb_t(char *line){
-	int count = 1;
-	const char* delimiter = " ";
-	pcb_t process;
-
-	// retrieve first token
-	char *token = strtok(line, delimiter);
-	strcpy(process.process_name, token);
-	process.state = READY; // set default state as READY.
-
-
-	while(token != NULL){
-		token = strtok(NULL, " ");
-		
-		switch(count)
-		{
-			case 1: {
-				process.entryTime = atoi(token);
-				//printf("case1: %d\n", atoi(token));
-				break;
-			}case 2: {
-				process.serviceTime = atoi(token);
-				process.remainingTime = atoi(token);
-				break;
-			}case 3: {
-			
-			}
-		}
-		count ++;
-	}
-	return process;
-}
-
 
 
 
@@ -189,10 +145,7 @@ void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
 				/// store event at output buffer.
 				enqueue(fcfs, running_process);
 			}
-			// update remaining time.
-			//running_process.remainingTime = running_process.remainingTime-1;
 		}
-
 		// if there is process ready for execution and previous process has completed execution
 		if(ready.item_count > 0 && completed){
 
@@ -201,7 +154,7 @@ void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
 			running_process.current_time = current_time;
 			completed = false;
 
-			// store for output
+			// store  event
 			enqueue(fcfs, running_process);
 		}
 		
