@@ -16,6 +16,12 @@
 
 Referenced and modified from:
 
+Is_Higher...
+
+This Priority Heap Min Heap property.
+The is higher priority function can be modified to easily alter the behaviour to make the heap max heap.
+
+
 */
 
 
@@ -41,18 +47,10 @@ int right_child(int i){
 	return (2*i + 2);
 }
 
-pcb_t get_min(Heap* heap){
+pcb_t get_root(Heap* heap){
 	return heap -> arr[0];
 }
 
-pcb_t extract_min(Heap* heap){
-
-	// get min item then delete the item.
-	pcb_t process = get_min(heap);
-	delete_minimum(heap);
-	return process;
-
-}
 
 /*Swap current with its parent*/
 void swap(Heap* heap, int x, int y){
@@ -61,12 +59,36 @@ void swap(Heap* heap, int x, int y){
 	heap->arr[y] = temp;
 }
 
+/* 
+This function compares the priority of process x and y.
+if process x is has a smaller remaining time return true else false.
+if process x and y has equal remainingTime, compare entryTime.
+if process x is has a smaller entryTime return true else false.
+if both process has the same entryTime return true, indicate process x has a greater priority.
+*/
+bool is_higher_priority(pcb_t x, pcb_t y){
+	if (x.remainingTime < y.remainingTime){
+		return true;
+		
+	}else if (y.remainingTime < x.remainingTime){
+		return false;
+		
+	}else{ // x.remainingTime equals y.remainingTime
+	
+		if (x.entryTime <= y.entryTime){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
+
 
 
 Heap* insert_heap(Heap* heap, pcb_t elem){
 
 	if(heap->size == heap->capacity){
-		fprintf(stderr, "maximum capacity reached for min heap!");
+		fprintf(stderr, "maximum capacity reached for the heap!");
 		return heap;
 	}
 	
@@ -89,8 +111,7 @@ Heap* insert_heap(Heap* heap, pcb_t elem){
 
 /*
 Performing heapify recursively.
-Rearranging the heap as to maintain the min-heap property.
-
+Rearranging the heap as to maintain the heap property.
 */
 Heap* heapify(Heap* heap, int index){
 	
@@ -103,30 +124,29 @@ Heap* heapify(Heap* heap, int index){
 	int left = left_child(index);
 	int right = right_child(index);
 	
-	int smallest = index;
+	int highest_priority = index;
 	
 	// if left is not the last element/ leaf
 	// if left child of element at index has a higher priority than element at index
 	if(left < heap->size && is_higher_priority(heap->arr[left], heap->arr[index])){
-		smallest = left;
+		highest_priority = left;
 	}
 	
 		// if left is not the last element/ leaf
 	// if left child of element at index has a higher priority than element at index
-	if(right < heap->size && is_higher_priority(heap->arr[right], heap->arr[smallest])){
-		smallest = right;
+	if(right < heap->size && is_higher_priority(heap->arr[right], heap->arr[highest_priority])){
+		highest_priority = right;
 	}
 	
-	if(smallest != index){
-		swap(heap, index, smallest);
-		heap = heapify(heap, smallest);
+	if(highest_priority != index){
+		swap(heap, index, highest_priority);
+		heap = heapify(heap, highest_priority);
 	}
 	return heap;
 }
 
 
-
-Heap* delete_minimum(Heap* heap){
+Heap* delete_root(Heap* heap){
 	// if heap is empty
 	if(!heap || heap->size == 0){
 		return heap;
@@ -139,17 +159,24 @@ Heap* delete_minimum(Heap* heap){
 	heap->arr[0] = last_elem;
 	
 	heap->size--;
-	size--; // why is this needed? // can try remove? !!!!
-	
-	// check if straight away return function call can or not.!!!!!!
-	heap = heapify(heap, 0); // heapify from the root.
-	return heap;
+
+	return heapify(heap, 0);
+}
+
+
+pcb_t extract_root(Heap* heap){
+
+	// get root item then delete the item.
+	pcb_t process = get_root(heap);
+	delete_root(heap);
+	return process;
+
 }
 
 
 void print_heap(Heap* heap){
 
-	printf("pcb_t Min Heap:\n");
+	printf("pcb_t Heap:\n");
 	
 	for(int i=0; i < heap->size; i++){
 		printf("%s -> ", heap->arr[i].process_name);
@@ -169,33 +196,6 @@ void free_heap(Heap* heap){
 
 
 
-/* 
-This function compares the priority of process x and y.
-if process x is has a smaller remaining time return true else false.
-if process x and y has equal remainingTime, compare entryTime.
-if process x is has a smaller entryTime return true else false.
-if both process has the same entryTime return true, indicate process x has a greater priority.
-
-
-need to test this function.!!!!!!!!!!!!!!
-
-*/
-bool is_higher_priority(pcb_t x, pcb_t y){
-	if (x.remainingTime < y.remainingTime){
-		return true;
-		
-	}else if (y.remainingTime < x.remainingTime){
-		return false;
-		
-	}else{ // x.remainingTime equals y.remainingTime
-	
-		if (x.entryTime <= y.entryTime){
-			return true;
-		}else{
-			return false;
-		}
-	}
-}
 
 
 /*
@@ -246,7 +246,7 @@ int main(){
 	printf("Test Prioirty: %d\n", is_higher_priority(proc1, proc2));
 	
 
-	// test init min heap and insert minheap
+	// test init heap and insert heap
 	Heap* heap = init_heap(SIZE);
 	
 	pcb_t processes[7] = {proc4, proc2, proc3, proc1, proc6, proc7, proc5};
@@ -258,13 +258,15 @@ int main(){
 	
 	pcb_t process;
 	for(int i=0; i < 7; i++){
-		process = extract_min(heap);
+		process = extract_root(heap);
 		printf("Extracted Process: %s\n", process.process_name);
 		
-		//process = get_min(heap);
+		//process = get(heap);
 		//printf("Get Process: %s\n", process.process_name);
 		print_heap(heap);
 	}
+	
+	free_heap(heap);
 }
 
 
