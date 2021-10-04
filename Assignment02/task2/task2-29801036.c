@@ -8,7 +8,7 @@ int main(){
 	// load textfile "processes.txt" into event_occur queue for processing.
 	load_textfile_to_pcb_t_queue("processes.txt", &event_occur);
 	
-	// simulates first come first serve process scheduler and record event into event_record queue.
+	// simulates shortest process remaining next scheduler and record event into event_record queue.
 	shortest_process_remaining_next(&event_occur, &event_record);
 	
 	// generate an output file according to the recorded events in event_record queue.
