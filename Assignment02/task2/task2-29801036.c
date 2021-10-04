@@ -44,10 +44,10 @@ void shortest_process_remaining_next(Queue *event_occur, Queue *event_record){
 		
 		// simulate running of processes
 		if (!completed){
-			running_process.remainingTime -= 1;
+			running_process.remainingTime --;
 			time_quant --;
 		
-			if(running_process.remainingTime == 0 ){
+			if(running_process.remainingTime == 0){
 				active_process --;
 				running_process.state = TERMINATED;
 				completed = true;
