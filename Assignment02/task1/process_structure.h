@@ -6,7 +6,7 @@
 
 /*Special enumerated data type for process state*/
 typedef enum {
-	READY, RUNNING, EXIT
+	READY, RUNNING, EXIT, TERMINATED
 }process_state_t;
 
 

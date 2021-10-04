@@ -22,8 +22,6 @@ P4 6 2 2
 */
 
 int main(){
-	int i;
-	pcb_t cur_process;
 	Queue event_occur, event_record;
 	initialise_queue(&event_occur);
 	initialise_queue(&event_record);
@@ -52,7 +50,7 @@ Queue *fcfs: queue that records the event occur.
 */
 void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
 
-	int current_time = 0, service_counter;
+	int current_time = 0;
 	bool completed = true;
 	int active_process = 0;
 	pcb_t running_process;
@@ -81,7 +79,7 @@ void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
 		// when there are incompleted process to be completed.
 		if(!completed){
 			//run the process and deduct 1 from the remainingTime
-			running_process.remainingTime = running_process.remainingTime-1;
+			running_process.remainingTime -= 1;
 			// if process completed running
 			if(running_process.remainingTime == 0){
 				running_process.state = EXIT;

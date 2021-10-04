@@ -63,8 +63,11 @@ void generate_output_file(const char* filepath, Queue *res_queue){
 			case RUNNING:
 				fprintf(fp, "Time %d: %s is in the running state.\n", cur_event.current_time, cur_event.process_name);
 				break;
+			case TERMINATED:
+				fprintf(fp, "Time %d: %s has finished execution.\n", cur_event.current_time, cur_event.process_name);
+				break;
 			case EXIT:
-				fprintf(fp, "TIme %d: %s has finished the running state.\n", cur_event.current_time, cur_event.process_name);
+				fprintf(fp, "Time %d: %s has been preempted.\n", cur_event.current_time, cur_event.process_name);
 				break;
 		}
 	}
