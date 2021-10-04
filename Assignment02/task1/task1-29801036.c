@@ -79,10 +79,10 @@ void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
 		// when there are incompleted process to be completed.
 		if(!completed){
 			//run the process and deduct 1 from the remainingTime
-			running_process.remainingTime -= 1;
+			running_process.remainingTime --;
 			// if process completed running
 			if(running_process.remainingTime == 0){
-				running_process.state = EXIT;
+				running_process.state = TERMINATED;
 				running_process.current_time = current_time;
 				completed = true; // indicate new process can be schduled to run.
 				active_process --;
