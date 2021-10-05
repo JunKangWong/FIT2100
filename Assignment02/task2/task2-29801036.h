@@ -9,4 +9,10 @@
 #define SIZE 100
 #define TIME_QUANTUM 3
 
+
+/*Function Prototype*/
 void shortest_process_remaining_next(Queue *event_occur, Queue *event_record);
+bool schedule_process(Heap *ready, pcb_t *running_process, int current_time);
+bool terminate_process(Queue *event_record, pcb_t *running_process, int current_time);
+bool preempt_process(Heap *ready, pcb_t *running_process, int current_time);
+void to_ready_queue(Heap *ready, Queue *event_occur);
