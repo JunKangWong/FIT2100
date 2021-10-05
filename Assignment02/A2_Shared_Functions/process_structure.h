@@ -6,17 +6,19 @@
 
 /*Special enumerated data type for process state*/
 typedef enum {
-	READY, RUNNING, EXIT, TERMINATED
+	READY, RUNNING, TERMINATED
 }process_state_t;
 
 
 
 typedef struct {
 	char process_name[PROCESS_NAME_SIZE]; // A string that identifies the process
-	int current_time; // current_time when an event occur.
+	int event_time; // time when an event occur.
 	
 	/*Time are measured in seconds*/
 	int entryTime;				// The time process entered system
+	int terminateTime;			// process terminated completed
+	int firstServedTime;		// TIme when the process is first served.
 	int serviceTime;			// The total CPU time required by the process
 	int remainingTime;			// Remaining service time until completion
 	int deadline;

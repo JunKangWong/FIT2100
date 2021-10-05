@@ -14,11 +14,7 @@ Return: 0 when file is unsucessfully loaded, else return 1 indicate success.
 */
 int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q){
 	FILE *fp;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
 	pcb_t proc;
-
 
 	fp = fopen(filepath, "r");
 	
@@ -34,10 +30,8 @@ int load_textfile_to_pcb_t_queue(const char* filepath, Queue *pcb_t_q){
 	}
 	
 	fclose(fp);
-	free(line);
 	return 1;
 }
-
 
 
 /*
@@ -48,29 +42,40 @@ Argument:
 const char* filepath: filepath to write the text file to.
 Queue *res_queue: queue containing process information to be written into the textfile.
 */
+void print_event(pcb_t cur_event){
+	switch(cur_event.state){
+		case READY:
+			printf("Time %d: %s has entered the system.\n", cur_event.entryTime, cur_event.process_name);
+			break;
+		case RUNNING:
+			printf("Time %d: %s is in the running state.\n", cur_event.event_time, cur_event.process_name);
+			break;
+		case TERMINATED:
+			printf("Time %d: %s has finished execution.\n", cur_event.terminateTime, cur_event.process_name);
+			break;
+	}
+}
+
+
+
 void generate_output_file(const char* filepath, Queue *res_queue){
 	FILE *fp;
 	fp = fopen(filepath, "w");
-	pcb_t cur_event;
+	pcb_t cur_process;
+	
+	int turn_around_time = -1,  wait_time = -1, deadline_met = -1;
 	
 	while(res_queue->item_count > 0){
-		cur_event = dequeue(res_queue);
+		cur_process = dequeue(res_queue);
 		
-		switch(cur_event.state){
-			case READY:
-				fprintf(fp, "Time %d: %s has entered the system.\n", cur_event.current_time, cur_event.process_name);
-				break;
-			case RUNNING:
-				fprintf(fp, "Time %d: %s is in the running state.\n", cur_event.current_time, cur_event.process_name);
-				break;
-			case TERMINATED:
-				fprintf(fp, "Time %d: %s has finished execution.\n", cur_event.current_time, cur_event.process_name);
-				break;
-			case EXIT:
-				fprintf(fp, "Time %d: %s has been preempted.\n", cur_event.current_time, cur_event.process_name);
-				break;
-		}
+		wait_time = cur_process.firstServedTime - cur_process.entryTime;
+		turn_around_time = cur_process.terminateTime - cur_process.entryTime;
+		deadline_met = (cur_process.deadline > turn_around_time) ? 1 : 0;
+
+		fprintf(fp, "%s %d %d %d\n", cur_process.process_name, wait_time, turn_around_time, deadline_met);
+
 	}
 	fclose(fp);
 }
+
 
