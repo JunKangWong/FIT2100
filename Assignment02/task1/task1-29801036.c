@@ -50,11 +50,9 @@ Queue *event_record: queue that records the event occur.
 */
 void first_come_first_serve(Queue *event_occur, Queue *event_record){
 
-	int current_time = 0;
+	int current_time = 0, active_process = 0;
 	bool completed = true;
-	int active_process = 0;
 	pcb_t running_process;
-	pcb_t arrive;
 	
 	Queue ready;
 	initialise_queue(&ready);
@@ -90,7 +88,6 @@ void first_come_first_serve(Queue *event_occur, Queue *event_record){
 
 
 
-
 bool schedule_process(Queue* ready, pcb_t *running_process, int current_time){
 	*running_process = dequeue(ready);
 	running_process->state = RUNNING;
@@ -104,8 +101,6 @@ bool schedule_process(Queue* ready, pcb_t *running_process, int current_time){
 	print_event(*running_process);
 	return false;
 }
-
-
 
 
 bool terminate_process(Queue* event_record, pcb_t *running_process, int current_time){
