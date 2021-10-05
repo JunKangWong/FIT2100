@@ -6,4 +6,7 @@
 #include "file_queue_manipulation.c"
 
 /*Function Prototype*/
-void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs);
+void first_come_first_serve(Queue *event_occur, Queue *event_record);
+bool schedule_process(Queue* ready, pcb_t *running_process, int current_time);
+bool terminate_process(Queue* event_occur, pcb_t *running_process, int current_time);
+void to_ready_queue(Queue *ready, Queue *event_occur);

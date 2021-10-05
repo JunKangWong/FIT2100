@@ -33,7 +33,7 @@ int main(){
 	first_come_first_serve(&event_occur, &event_record);
 	
 	// generate an output file according to the recorded events in event_record queue.
-	generate_output_file("results-1.txt", &event_record);
+	generate_output_file("results-task1.txt", &event_record);
 }
 
 
@@ -45,10 +45,10 @@ the struct queue as a record.
 
 Argument: 
 
-Queue *event_occur,: queue containing the "future" event that will occur.
-Queue *event_record: queue that records the event occur.
+Queue *pcb_t_q,: queue containing the "future" event that will occur.
+Queue *fcfs: queue that records the event occur.
 */
-void first_come_first_serve(Queue *event_occur, Queue *event_record){
+void first_come_first_serve(Queue *pcb_t_q, Queue *fcfs){
 
 	int current_time = 0;
 	bool completed = true;
@@ -61,12 +61,19 @@ void first_come_first_serve(Queue *event_occur, Queue *event_record){
 
 	// run while there are still process to be run or any remaining process is still running.
 	// this outer while loop simulates clock ticks
-	while(event_occur->item_count > 0 || active_process > 0){
+	while(pcb_t_q->item_count > 0 || active_process > 0){
 
 		// enqueue entry/ arrival process (while loop incase multiple same arrival time)
-		while(event_occur->value[(event_occur->front) + 1].entryTime == current_time){
-			to_ready_queue(&ready, event_occur);
+		while(pcb_t_q->value[(pcb_t_q->front) + 1].entryTime == current_time){
+			
+			// retrieved process from "non_visible queue" and place it into the ready queue.
+			arrive = dequeue(pcb_t_q);
+			arrive.current_time = current_time;
+			enqueue(&ready, arrive);
 			active_process ++;
+			
+			// record arrival event in an array for output purposes.
+			enqueue(fcfs, arrive); 
 		}
 
 		// when there are incompleted process to be completed.
@@ -75,56 +82,28 @@ void first_come_first_serve(Queue *event_occur, Queue *event_record){
 			running_process.remainingTime --;
 			// if process completed running
 			if(running_process.remainingTime == 0){
-				completed = terminate_process(event_record,&running_process, current_time);
+				running_process.state = TERMINATED;
+				running_process.current_time = current_time;
+				completed = true; // indicate new process can be schduled to run.
 				active_process --;
+
+				/// store event at output buffer.
+				enqueue(fcfs, running_process);
 			}
 		}
 		// if there is process ready for execution and previous process has completed execution
 		if(ready.item_count > 0 && completed){
-			completed = schedule_process(&ready, &running_process, current_time);
+
+			running_process = dequeue(&ready);
+			running_process.state = RUNNING;
+			running_process.current_time = current_time;
+			completed = false;
+
+			// store  event
+			enqueue(fcfs, running_process);
 		}
+		
 		// + 1 second (clock tick by 1 second)
 		current_time ++;
 	}
 }
-
-
-
-
-bool schedule_process(Queue* ready, pcb_t *running_process, int current_time){
-	*running_process = dequeue(ready);
-	running_process->state = RUNNING;
-	running_process->event_time = current_time;
-	// upddate first served time only if remaining equals service time (first serve)
-	running_process->firstServedTime  = (running_process->remainingTime == running_process->serviceTime) ? 
-	current_time : running_process->firstServedTime;
-	running_process->event_time = current_time;
-	
-	// print event to terminal
-	print_event(*running_process);
-	return false;
-}
-
-
-
-
-bool terminate_process(Queue* event_record, pcb_t *running_process, int current_time){
-	running_process->state = TERMINATED;
-	running_process->terminateTime = current_time;
-	enqueue(event_record, *running_process);
-	
-	/// print the event to standard out.
-	print_event(*running_process);
-	return true;
-}
-
-
-void to_ready_queue(Queue *ready, Queue *event_occur){
-	pcb_t arrive = dequeue(event_occur);
-	enqueue(ready, arrive);
-	// print event at standard out.
-	print_event(arrive);
-}
-
-
-
