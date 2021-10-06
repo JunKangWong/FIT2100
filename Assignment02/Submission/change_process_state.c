@@ -20,7 +20,6 @@ bool terminate_process(Queue *event_record, pcb_t *running_process, int current_
 	running_process->state = TERMINATED;
 	running_process->terminateTime = current_time;
 	enqueue(event_record, *running_process);
-	
 	print_event(*running_process);
 	return true;
 }

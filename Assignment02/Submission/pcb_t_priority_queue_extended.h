@@ -1,8 +1,14 @@
-//#include <stdio.h>
-//#include <string.h>
+/*
+Name			: Wong Jun Kang
+StudentID		: 29801036
+Date created	: 01/10/2021
+Last Modified	: 07/10/2021
+
+The header file of pcb_t_priority_queue_extended.c
+*/
+
 #include <stdlib.h>
 #include <stdbool.h>
-//#include "process_structure.h"
 
 typedef enum {
 	SHORTEST_REMAINING_TIME, MAXIMISE_DEADLINE, FIRST_COME_FIRST_SERVE

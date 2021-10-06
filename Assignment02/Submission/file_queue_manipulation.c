@@ -70,7 +70,7 @@ void generate_output_file(const char* filepath, Queue *res_queue){
 		
 		wait_time = cur_process.firstServedTime - cur_process.entryTime;
 		turn_around_time = cur_process.terminateTime - cur_process.entryTime;
-		deadline_met = (cur_process.deadline > turn_around_time) ? 1 : 0;
+		deadline_met = (cur_process.deadline >= turn_around_time) ? 1 : 0;
 
 		fprintf(fp, "%s %d %d %d\n", cur_process.process_name, wait_time, turn_around_time, deadline_met);
 

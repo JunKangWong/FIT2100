@@ -1,6 +1,29 @@
+/*
+Name			: Wong Jun Kang
+StudentID		: 29801036
+Date created	: 01/10/2021
+Last Modified	: 07/10/2021
+
+This module contains the main logic used for the scheduling algorithm.
+*/
 #include "scheduling_algorithm.h"
 
 
+/*
+This function is used to run and execute the scheduling algorithm.
+A selector enum parameter needs to be specified for the user to select their desired 
+schedule_mode.
+
+const char* source_path: path containing the source file to be processed.
+const char* dest_path: destination path to save the processed files.
+priority priority_rule: the priority rule selector. Specified the enum, to select 
+priority_rule between:
+FIRST_COME_FIRST_SERVE: based on first come first serve priority function 
+SHORTEST_REMAINING_NEXT: based on shortest remaining next priority function 
+MAXIMISE_DEADLINE: maximise the number of processes to meet deadlines.
+
+schedule_mode mode: selecttor of PREEMTIVE or NON_PREEMPTIVE operation mode.
+*/
 void scheduling_algorithm(const char* source_path, const char* dest_path, priority priority_rule, schedule_mode mode){
 	Queue event_occur, event_record;
 	initialise_queue(&event_occur);
@@ -9,7 +32,7 @@ void scheduling_algorithm(const char* source_path, const char* dest_path, priori
 	// load textfile "processes.txt" into event_occur queue for processing.
 	load_textfile_to_pcb_t_queue(source_path, &event_occur);
 	
-	
+	// select operation mode based on the mode selector.
 	switch (mode){
 		case PREEMPTIVE:
 			preemptive_scheduling(&event_occur, &event_record, priority_rule);
@@ -24,7 +47,19 @@ void scheduling_algorithm(const char* source_path, const char* dest_path, priori
 
 
 
+/*
+This function simulates the execution of a preemptive scheduling operation.
 
+Queue *event_occur: containing a list of "future" events to be loaded into the ready queue.
+Queue *event_record: Status of the terminated process. This is stored to be output in log file later.
+
+priority priority_rule: the priority rule selector. Specified the enum, to select 
+priority_rule between:
+FIRST_COME_FIRST_SERVE: based on first come first serve priority function 
+SHORTEST_REMAINING_NEXT: based on shortest remaining next priority function 
+MAXIMISE_DEADLINE: maximise the number of processes to meet deadlines.
+
+*/
 void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority priority_rule){
 	int time_quant = 0, current_time = 0, active_process = 0;
 	bool completed = true;
@@ -77,7 +112,19 @@ void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority pri
 
 
 
+/*
+This function simulates the execution of a non preemptive scheduling operation.
 
+Queue *event_occur: containing a list of "future" events to be loaded into the ready queue.
+Queue *event_record: Status of the terminated process. This is stored to be output in log file later.
+
+priority priority_rule: the priority rule selector. Specified the enum, to select 
+
+priority_rule between:
+FIRST_COME_FIRST_SERVE: based on first come first serve priority function 
+SHORTEST_REMAINING_NEXT: based on shortest remaining next priority function 
+MAXIMISE_DEADLINE: maximise the number of processes to meet deadlines.
+*/
 void non_preemptive_scheduling(Queue *event_occur, Queue *event_record, priority priority_rule){
 	int current_time = 0, active_process = 0;
 	bool completed = true;
@@ -117,4 +164,3 @@ void non_preemptive_scheduling(Queue *event_occur, Queue *event_record, priority
 	// free up memory of ready queue.
 	free_heap(ready);
 }
-
