@@ -1,4 +1,13 @@
 /*
+Name			: Wong Jun Kang
+StudentID		: 29801036
+Date created	: 01/10/2021
+Last Modified	: 07/10/2021
+
+pcb_t (fcfs) queue structure defined in stack.
+*/
+
+/*
 This module is a simple queue(FCFS) implementation implemeted in stack memory.
 */
 

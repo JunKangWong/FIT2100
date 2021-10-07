@@ -1,5 +1,11 @@
-//#include "process_structure.h"
+/*
+Name			: Wong Jun Kang
+StudentID		: 29801036
+Date created	: 01/10/2021
+Last Modified	: 07/10/2021
 
+header file of pcb_t_queue.c
+*/
 #define MAX_SIZE 100
 
 
