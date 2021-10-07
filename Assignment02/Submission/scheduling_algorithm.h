@@ -4,7 +4,7 @@ StudentID		: 29801036
 Date created	: 01/10/2021
 Last Modified	: 07/10/2021
 
-The header file of scheduling_algorithm.c
+The header file of scheduling algorithm.c
 */
 
 #include <stdio.h>
@@ -12,7 +12,7 @@ The header file of scheduling_algorithm.c
 #include <string.h>
 #include <stdbool.h>
 #include "process_structure.h" // this has to be called first for pcb_t structures.
-#include "file_queue_manipulation.c"
+#include "pcb_t_file_io.c"
 #include "pcb_t_priority_queue_extended.c" // this has to be called before change_process_state.c for queue structure.
 #include "change_process_state.c"
 

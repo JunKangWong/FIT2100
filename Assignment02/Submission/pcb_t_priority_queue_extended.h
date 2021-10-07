@@ -11,7 +11,7 @@ The header file of pcb_t_priority_queue_extended.c
 #include <stdbool.h>
 
 typedef enum {
-	SHORTEST_REMAINING_TIME, MAXIMISE_DEADLINE, FIRST_COME_FIRST_SERVE
+	SHORTEST_PROCESS_NEXT, MAXIMISE_DEADLINE, FIRST_COME_FIRST_SERVE
 }priority;
 
 

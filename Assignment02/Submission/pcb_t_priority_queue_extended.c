@@ -123,7 +123,7 @@ bool is_higher_priority(Heap* heap, pcb_t x, pcb_t y){
 		case FIRST_COME_FIRST_SERVE:
 			is_x_higher_priority = first_come_first_serve(x, y);
 			break;
-		case SHORTEST_REMAINING_TIME:
+		case SHORTEST_PROCESS_NEXT:
 			is_x_higher_priority = shorter_remaining_time_first(x, y);
 			break;
 		case MAXIMISE_DEADLINE:

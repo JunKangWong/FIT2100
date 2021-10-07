@@ -67,6 +67,7 @@ void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority pri
 	
 	// initialise a priority queue (min heap) based on priority rule
 	Heap* ready = init_heap(SIZE, priority_rule);
+	ready->lifetime_counter = 0; // stores the lifetime of the ready queue.
 	
 	// while there are still process to be loaded.
 	// This outer loop simulates clock tick.
@@ -104,7 +105,7 @@ void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority pri
 			completed = schedule_process(ready, &running_process, current_time);
 		}
 		// clock tick by 1 second
-		current_time ++;
+		ready->lifetime_counter = ++current_time;
 	}
 	// free up memory of ready queue.
 	free_heap(ready);
