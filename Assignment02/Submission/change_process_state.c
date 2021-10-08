@@ -9,9 +9,12 @@ These function not only update the state but also other relevant information lik
 time of termination, remainingTime etc.
 
 */
-
-
-//#include "change_process_state.h"
+#include <stdbool.h>
+#include "change_process_state.h"
+#include "process_structure.h"
+#include "pcb_t_file_io.h"
+#include "pcb_t_queue.h"
+#include "pcb_t_priority_queue_extended.h"
 
 
 /*

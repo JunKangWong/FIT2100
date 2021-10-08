@@ -11,7 +11,10 @@ written to optimise the number of processes that meet deadlines.
 
 */
 
-#include "scheduling_algorithm.c"
+#include <stdlib.h>
+#include "scheduling_algorithm.h"
+#include "pcb_t_file_io.h"
+#include "pcb_t_priority_queue_extended.h"
 
 
 int main(int argc, char** argv){
@@ -19,8 +22,7 @@ int main(int argc, char** argv){
 	store_path(&source_path, argv[1], argc == 1);
 	
 	// this implementation maximizes the number of deadline met processes.
-	scheduling_algorithm(source_path, "results-3.txt", MAXIMISE_DEADLINE, NON_PREEMPTIVE);
-	//scheduling_algorithm(source_path, "results-3.txt", MAXIMISE_DEADLINE, PREEMPTIVE);
+	execute_preemptive(source_path, "results-3.txt", MAXIMISE_DEADLINE, 1);
 	free(source_path);
 	return 0;
 }

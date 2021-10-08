@@ -6,8 +6,14 @@ Last Modified	: 07/10/2021
 
 File io operations of pcb_t related items.
 */
-
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "process_structure.h"
+#include "pcb_t_queue.h"
 #include "pcb_t_file_io.h"
+
 
 
 /*

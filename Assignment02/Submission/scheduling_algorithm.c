@@ -6,25 +6,26 @@ Last Modified	: 07/10/2021
 
 This module contains the main logic used for the scheduling algorithm.
 */
+#include <stdbool.h>
 #include "scheduling_algorithm.h"
+#include "process_structure.h"
+#include "change_process_state.h"
+#include "pcb_t_queue.h"
+#include "pcb_t_file_io.h"
+#include "pcb_t_priority_queue_extended.h"
 
 
 /*
-This function is used to run and execute the scheduling algorithm.
-A selector enum parameter needs to be specified for the user to select their desired 
-schedule_mode.
+This function simulates the execution of preemptive scheduling.
+The priority of the schduling is based on the priority rule specified.
 
-const char* source_path: path containing the source file to be processed.
-const char* dest_path: destination path to save the processed files.
-priority priority_rule: the priority rule selector. Specified the enum, to select 
-priority_rule between:
-FIRST_COME_FIRST_SERVE: based on first come first serve priority function 
-SHORTEST_REMAINING_NEXT: based on shortest remaining next priority function 
-MAXIMISE_DEADLINE: maximise the number of processes to meet deadlines.
+const char* source_path: source path of the file containing processes to be simulated.
+const char* dest_path: destination path to save the processed output file.
+priority priority_rule: priority tule such as FIRST_COME_FIRST_SERVE, SHORTES_PROCESS_NEXT etc.
+int t_quant: time quantum of preempt.
 
-schedule_mode mode: selecttor of PREEMTIVE or NON_PREEMPTIVE operation mode.
 */
-void scheduling_algorithm(const char* source_path, const char* dest_path, priority priority_rule, schedule_mode mode){
+void execute_preemptive(const char* source_path, const char* dest_path, priority priority_rule, int t_quant){
 	Queue event_occur, event_record;
 	initialise_queue(&event_occur);
 	initialise_queue(&event_record);
@@ -33,14 +34,32 @@ void scheduling_algorithm(const char* source_path, const char* dest_path, priori
 	load_textfile_to_pcb_t_queue(source_path, &event_occur);
 	
 	// select operation mode based on the mode selector.
-	switch (mode){
-		case PREEMPTIVE:
-			preemptive_scheduling(&event_occur, &event_record, priority_rule);
-			break;
-		case NON_PREEMPTIVE:
-			non_preemptive_scheduling(&event_occur, &event_record, priority_rule);
-			break;
-	}
+	preemptive_scheduling(&event_occur, &event_record, priority_rule, t_quant);
+
+	// generate an output file according to the recorded events in event_record queue.
+	generate_output_file(dest_path, &event_record);
+}
+
+
+/*
+This function simulates the execution of non-preemptive scheduling.
+The priority of the schduling is based on the priority rule specified.
+
+const char* source_path: source path of the file containing processes to be simulated.
+const char* dest_path: destination path to save the processed output file.
+priority priority_rule: priority tule such as FIRST_COME_FIRST_SERVE, SHORTES_PROCESS_NEXT etc.
+*/
+void execute_non_preemptive(const char* source_path, const char* dest_path, priority priority_rule){
+	Queue event_occur, event_record;
+	initialise_queue(&event_occur);
+	initialise_queue(&event_record);
+
+	// load textfile "processes.txt" into event_occur queue for processing.
+	load_textfile_to_pcb_t_queue(source_path, &event_occur);
+	
+	// select operation mode based on the mode selector.
+	non_preemptive_scheduling(&event_occur, &event_record, priority_rule);
+
 	// generate an output file according to the recorded events in event_record queue.
 	generate_output_file(dest_path, &event_record);
 }
@@ -60,7 +79,7 @@ SHORTEST_REMAINING_NEXT: based on shortest remaining next priority function
 MAXIMISE_DEADLINE: maximise the number of processes to meet deadlines.
 
 */
-void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority priority_rule){
+void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority priority_rule, int t_quant){
 	int time_quant = 0, current_time = 0, active_process = 0;
 	bool completed = true;
 	pcb_t running_process;
@@ -92,7 +111,7 @@ void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority pri
 				// if running process is still the highest priority process after time quantum is over.
 				// continue to run --> reset time quantum
 				if(is_higher_priority(ready, running_process, get_root(ready))){
-					time_quant = TIME_QUANTUM; 
+					time_quant = t_quant; 
 				}else{
 					completed = preempt_process(ready, &running_process, current_time); 
 				}
@@ -101,7 +120,7 @@ void preemptive_scheduling(Queue *event_occur, Queue *event_record, priority pri
 		// simulates scheduling of process
 		// if current process completes running andready queue has element to be scheduled.
 		if(ready->size > 0 && completed){
-			time_quant = TIME_QUANTUM; // reset time quantum
+			time_quant = t_quant; // reset time quantum
 			completed = schedule_process(ready, &running_process, current_time);
 		}
 		// clock tick by 1 second

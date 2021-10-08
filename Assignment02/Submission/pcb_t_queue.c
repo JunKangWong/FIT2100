@@ -10,7 +10,7 @@ pcb_t (fcfs) queue structure defined in stack.
 /*
 This module is a simple queue(FCFS) implementation implemeted in stack memory.
 */
-
+#include "process_structure.h"
 #include "pcb_t_queue.h"
 
 

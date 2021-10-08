@@ -11,7 +11,10 @@ main function.
 
 */
 
-#include "scheduling_algorithm.c"
+#include <stdlib.h>
+#include "scheduling_algorithm.h"
+#include "pcb_t_file_io.h"
+#include "pcb_t_priority_queue_extended.h"
 
 
 int main(int argc, char** argv){
@@ -19,8 +22,8 @@ int main(int argc, char** argv){
 	store_path(&source_path, argv[1], argc == 1);
 	
 	// run shorter process next in preemptive mode so it will be shortest remaining time next.
-	scheduling_algorithm(source_path, "results-2.txt", SHORTEST_PROCESS_NEXT, PREEMPTIVE);
+	// time quantum is set to 3.
+	execute_preemptive(source_path, "results-2.txt", SHORTEST_PROCESS_NEXT, 3);
 	free(source_path);
 	return 0;
 }
-

@@ -6,7 +6,9 @@ Last Modified	: 07/10/2021
 
 The process structure of pcb_t processes.
 */
-#include <stdio.h>
+
+#ifndef P_STRUCTURE_H
+#define P_STRUCTURE_H
 
 // assume name of process is never more than 10 characters in length and does not contain spaces
 #define PROCESS_NAME_SIZE 11
@@ -33,3 +35,6 @@ typedef struct {
 	process_state_t state;		// current process state (e.g. READY) as specified in the enum above
 
 }pcb_t;
+
+
+#endif /* P_STRUCTURE_H */

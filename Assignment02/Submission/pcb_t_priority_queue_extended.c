@@ -12,8 +12,11 @@ A priority function is created to decide the priority of the scheduling algorith
 */
 
 /*header file*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "process_structure.h"
 #include "pcb_t_priority_queue_extended.h"
-
 
 /*
 Function to initialise priority queue.
@@ -215,8 +218,8 @@ false otherwise.
 */
 bool maximise_processes(Heap* heap, pcb_t x, pcb_t y){
 	int current_time = heap->lifetime_counter;
-	int X = (x.entryTime + x.deadline) - current_time; 
-	int Y = (y.entryTime + y.deadline) - current_time;
+	int X = x.entryTime + x.deadline; 
+	int Y = y.entryTime + y.deadline;
 	bool X_pass = deadline_test(x, current_time);
 	bool Y_pass = deadline_test(y, current_time);
 	
@@ -253,7 +256,7 @@ int current_time: current time of the scheduling cycle.
 return: boolean true if process can meet deadline, false otherwise.
 */
 bool deadline_test(pcb_t p, int current_time){
-	return current_time + p.serviceTime <= p.entryTime + p.deadline;
+	return current_time + p.remainingTime <= p.entryTime + p.deadline;
 }
 
 
@@ -413,137 +416,3 @@ void free_heap(Heap* heap){
 	free(heap->arr);
 	free(heap);
 }
-
-
-
-
-
-/*
-
-bool maximise_processes(Heap* heap, pcb_t x, pcb_t y){
-	int current_time = heap->lifetime_counter;
-	int X = (x.entryTime + x.deadline) - current_time; 
-	int Y = (y.entryTime + y.deadline) - current_time;
-	bool X_pass = deadline_test(x, current_time);
-	bool Y_pass = deadline_test(y, current_time);
-	
-	// if both process x and process y passes the deadline test
-	// meaning that they both can meet deadline if scheduled now.
-	if (X_pass && Y_pass){
-		// if x has a sooner deadline
-		if(X <= Y){
-			// if y can meets its deadline if x executes first
-			if (deadline_test(y, current_time + x.service_time)){
-				// as 1 of the processes is guaranteed not to meet its deadline
-				//executes x first
-				return true;
-			}else {
-				// Since we have to have to "sacrifice" one process
-				// as y cannot meet deadline if execute after x
-				// sacrifice the one with longer serviceTime.
-				return x.serviceTime < y.serviceTime;
-			}
-		}else{
-			// if y has a sooner deadline
-			// if x can meets its deadline if y executes first
-			if (deadline_test(x, current_time + y.service_time)){
-				// as 1 of the processes is guaranteed not to meet its deadline
-				//executes y first
-				return false;
-			}else {
-				// Since we have to have to "sacrifice" one process
-				// as y cannot meet deadline if execute after x
-				// sacrifice the one with longer serviceTime.
-				return y.serviceTime < x.serviceTime;
-			}
-		}
-	
-	// x has higher priority if, x can meet deadline
-	}else if(X_pass && !Y_pass) {
-		return true;
-	// x has lower priority if, x cannot meet deadline
-	}else if(!X_pass && Y_pass){
-		return false;
-	// process with shorter remainingTime has higher priority if both processes cannot meet deadline.
-	}else{
-		return shorter_remaining_time_first(x, y);
-	}
-}
-*/
-
-
-
-/*
-May implement if require
-
-MinHeap* delete_element(MinHeap* heap, int index){
-
-}
-
-void rise(){
-
-}
-
-
-
-int main(){
-	pcb_t proc1, proc2, proc3, proc4, proc5, proc6, proc7, proc8;
-	
-	// test is higher priority
-	strcpy(proc1.process_name,"P1");
-	proc1.remainingTime = 1;
-	proc1.entryTime = 2;
-	
-	strcpy(proc2.process_name,"P2");
-	proc2.remainingTime = 2;
-	proc2.entryTime = 3;
-	
-	strcpy(proc3.process_name,"P3");
-	proc3.remainingTime = 3;
-	proc3.entryTime = 3;
-	
-	strcpy(proc4.process_name,"P4");
-	proc4.remainingTime = 4;
-	proc4.entryTime = 3;
-	
-	strcpy(proc5.process_name,"P5");
-	proc5.remainingTime = 5;
-	proc5.entryTime = 3;
-	
-	strcpy(proc6.process_name,"P6");
-	proc6.remainingTime = 6;
-	proc6.entryTime = 3;
-	
-	strcpy(proc7.process_name,"P7");
-	proc7.remainingTime = 7;
-	proc7.entryTime = 3;
-	
-	printf("Test Prioirty: %d\n", is_higher_priority(proc1, proc2));
-	
-
-	// test init heap and insert heap
-	Heap* heap = init_heap(100);
-	
-	pcb_t processes[7] = {proc4, proc2, proc3, proc1, proc6, proc7, proc5};
-	for(int j=0; j < 7; j++){
-		insert_heap(heap, processes[j]);
-	}
-	
-	print_heap(heap);
-	
-	pcb_t process;
-	for(int i=0; i < 7; i++){
-		process = extract_root(heap);
-		printf("Extracted Process: %s\n", process.process_name);
-		
-		//process = get(heap);
-		//printf("Get Process: %s\n", process.process_name);
-		print_heap(heap);
-	}
-	
-	free_heap(heap);
-}
-
-*/
-
-

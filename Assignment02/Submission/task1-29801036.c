@@ -9,8 +9,10 @@ Though changing the 3rd parameter into "SHORTEST_PROCESS_NEXT", will be
 switched to shorest process next implementation.
 
 */
-
-#include "scheduling_algorithm.c"
+#include <stdlib.h>
+#include "scheduling_algorithm.h"
+#include "pcb_t_file_io.h"
+#include "pcb_t_priority_queue_extended.h"
 
 
 int main(int argc, char** argv){
@@ -18,8 +20,9 @@ int main(int argc, char** argv){
 	store_path(&source_path, argv[1], argc == 1);
 	
 	// run first_come_first serve in a non_preemptive context.
-	scheduling_algorithm(source_path, "results-1.txt", FIRST_COME_FIRST_SERVE, NON_PREEMPTIVE);
+	execute_non_preemptive(source_path, "results-1.txt", FIRST_COME_FIRST_SERVE);
 	free(source_path);
 	return 0;
 }
+
 
