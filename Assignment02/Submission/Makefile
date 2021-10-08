@@ -22,7 +22,5 @@ task2: $(OBJS) $(TASK2)
 	$(CC) $(LFLAGS) $(OBJS) $(TASK2) -o task2
 task3: $(OBJS) $(TASK3)
 	$(CC) $(LFLAGS) $(OBJS) $(TASK3) -o task3
-%.o: %.c
-	$(CC) $(LFLAGS) $< -o $@
 clean:
 	rm -f *.o task1 task2 task3 result*.txt
