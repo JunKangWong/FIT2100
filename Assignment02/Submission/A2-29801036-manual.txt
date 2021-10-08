@@ -1,0 +1,255 @@
+HOW TO COMPILE
+
+Place the files "change_process_state.c", "change_process_state.h", "pcb_t_file_io.c", "pcb_t_file_io.h", "pcb_t_priority_queue_extended.c", 
+"pcb_t_priority_queue_extended.", "pcb_t_queue.c", "pcb_t_queue.h", "process_structure.c", "process_structure.h", "processes.txt", 
+"scheduling_algorithm.c", "scheduling_algorithm.h", "task1-29801036.c", "task2-29801036.c", "task3-29801036.c" under the same directory 
+together with the "Makefile".
+
+To compile the program run the command "make" in the command prompt.
+To execute the program run the command "./task<num>", where num is the task number.
+_______________________________________________________________________________________________________________________________________
+
+Task 1
+
+NAME
+	./task1 - task1 (First Come First Serve)
+	
+
+SYPNOSIS
+	./task1
+	./task1 [sourcefile]
+
+DESCRIPTION
+	./task1 will perform first come first serve scheduling algorithm simulation with the provided sourcefile. If source file is not provided
+	task1 will perform the scheduling based on the file "processes.txt" placed under the same directory. The simulation will produced a output file
+	named task-1.txt which records information in the sequence of process termination. Information such as wait time, turnaround time and deadline met
+	will be recorded in the output file. Additionally, everytime when a process entered the ready queue or changes its state a message will be printed
+	to stdout.
+
+ASSUMPTION
+	The first come first served algorithm is based on the priority function in the "pcb_t_priority_queue_extendend.c". The priority is based on
+	the entry time of each processes, processes with a smaller entryTime (i.e. arrival time) will get scheduled before process with a larger
+	entryTime (i.e. late entry). An assumption is made on the sequence of execution for processe with same entryTime. For processes with the 
+	same entryTime, the process with a shorter serviceTime will get scheduled first, if both processes have the same entryTime and serviceTime,
+	process X will get scheduled first such that process X is the first parameter of the priority function.
+	
+	Process name must not exceeds 11 characters.
+	
+	Output file contains information in the order of process termination.
+	
+	The input file format has to be in the following conventions:
+	<process_name> <entryTime> <serviceTime> <deadline duration>
+
+
+OUTPUT
+	task-1.txt in the following format:
+	<process_name> <wait time> <turnaround time> <deadline met>
+
+EXAMPLE
+	./task1
+	content of processes.txt
+		P1 0 3 5
+		P2 1 6 7
+		P3 4 4 6
+		P4 6 2 2
+
+	Output file:
+		P1 0 3 1
+		P2 2 8 0
+		P3 5 9 0
+		P4 7 9 0
+		NOTE: please note that the output will not always be ordered
+		output is based on the order of process termination.
+	Stdout:
+		Time 0: P1 has entered the system.
+		Time 0: P1 is in the running state.
+		Time 1: P2 has entered the system.
+		Time 3: P1 has finished execution.
+		Time 3: P2 is in the running state.
+		Time 4: P3 has entered the system.
+		Time 6: P4 has entered the system.
+		Time 9: P2 has finished execution.
+		Time 9: P3 is in the running state.
+		Time 13: P3 has finished execution.
+		Time 13: P4 is in the running state.
+		Time 15: P4 has finished execution.
+		
+OVERVIEW
+	./A "processes.txt" file must be placed under the same directory as task1.
+________________________________________________________________________________________________________________________
+
+Task 2
+
+NAME
+	./task2 - task2 (Shortest Time Remaining Next)
+	
+
+SYPNOSIS
+	./task2
+	./task2 [sourcefile]
+
+DESCRIPTION
+	./task2 will perform Shortest Time Remaining Next scheduling algorithm simulation with a quantum of 3 with the provided sourcefile. 
+	If source file is not provided task2 will perform the scheduling based on the file "processes.txt" placed under the same directory. 
+	The simulation will produced a output file named task-2.txt which records information in the sequence of process termination. Information
+	such as wait time, turnaround time and deadline met will be recorded in the output file. Additionally, everytime when a process entered
+	the ready queue or changes its state a message will be printed to stdout.
+
+ASSUMPTION
+	The Shortest Time Remaining Next algorithm is based on the priority function in the "pcb_t_priority_queue_extendend.c". The priority is based on
+	the remaingTime of each processes, processes with a smaller remaingTime will get scheduled before process with a larger
+	remainingTime. An assumption is made on the sequence of execution for processe with same remaingTime . For processes with the 
+	same remaingTime, the process with a sooner entryTime will get scheduled first, if both processes have the same remainingTime and
+	entryTime, process X will get scheduled first such that process X is the first parameter of the priority function.
+	
+	Process name must not exceeds 11 characters.
+	
+	Output file contains information in the order of process termination.
+	
+	The input file format has to be in the following conventions:
+	<process_name> <entryTime> <serviceTime> <deadline duration>
+	
+	Since the scheduler is ran in a preemptive context, when the currently running process is stil the highest priority process after
+	its time quantum has been finished and the remaingTime is still not 0. The same process will not be preempted back to the ready queue
+	instead the time quantum will get reset.
+
+
+OUTPUT
+	task-2.txt in the following format:
+	<process_name> <wait time> <turnaround time> <deadline met>
+
+EXAMPLE
+	./task2
+	content of processes.txt
+		P1 0 3 5
+		P2 1 6 7
+		P3 4 4 6
+		P4 6 2 2
+	
+	Output:
+		P1 0 3 1
+		P4 0 2 1
+		P2 2 10 0
+		P3 7 11 0
+	
+	Stdout:
+		Time 0: P1 has entered the system.
+		Time 0: P1 is in the running state.
+		Time 1: P2 has entered the system.
+		Time 3: P1 has finished execution.
+		Time 3: P2 is in the running state.
+		Time 4: P3 has entered the system.
+		Time 6: P4 has entered the system.
+		Time 6: P4 is in the running state.
+		Time 8: P4 has finished execution.
+		Time 8: P2 is in the running state.
+		Time 11: P2 has finished execution.
+		Time 11: P3 is in the running state.
+		Time 15: P3 has finished execution.
+
+
+OVERVIEW
+	A "processes.txt" file must be placed under the same directory as task2.
+_______________________________________________________________________________________________________________________________________
+
+Task 3
+
+NAME
+	./task3 - task3 (Maximise Number of processes to complete before deadline met)
+	
+
+SYPNOSIS
+	./task3
+	./task3 [sourcefile]
+
+DESCRIPTION
+	./task3 will perform a scheduling algorithm simulation to maximise the number of processes that are completed before their deadlines.
+	A quantum of 1 is used to preempt the program such that, when a process with a higher priority has entered it will be compared immediately
+	with the currently running process to maximise the number of processes to meet deadlines.If source file is not provided task3 will perform the 
+	scheduling based on the file "processes.txt" placed under the same directory. The simulation will produced a output file named task-3.txt 
+	which records information in the sequence of process termination. Information such as wait time, turnaround time and deadline met will be recorded
+	in the output file. Additionally, everytime when a process entered the ready queue or changes its state a message will be printed to stdout.
+
+HEURISTIC and ASSUMPTION
+	The  algorithm is based on the priority function in the "pcb_t_priority_queue_extendend.c".
+	If both processess can be completed before deadline is met, the process with a smaller deadline period + entryTime 
+	(i.e. smaller deadline time) will be scheduled before the process with a larger deadline time. Also, processes that 
+	can no longer meet their deadline time will has a lower priority than processes that can still meet their deadline if 
+	scheduled now during current time. If both processes can no longer meet their deadline, the process with a smaller serviceTime
+	will be scheduled first.
+	
+	Process name must not exceeds 11 characters.
+	
+	Output file contains information in the order of process termination.
+	
+	The input file format has to be in the following conventions:
+	<process_name> <entryTime> <serviceTime> <deadline duration>
+	
+	Since the scheduler is ran in a preemptive context, when the currently running process is stil the highest priority process after
+	its time quantum has been finished and the remaingTime is still not 0. The same process will not be preempted back to the ready queue
+	instead the time quantum will get reset.
+
+HOW AND WHY THIS WORK?
+	This algorithm works because it will schedule the processes with earliest deadline first, this increases the chances for these processes
+	to complete their execution before the deadline. Also, when the processes can no longer meet their deadlines their priority will be lower.
+	This ensures that no time will be wasted on processes that can no longer meet their deadlines. Also, as the algorithm is run in a preemptive context
+	when a new process arrived, and the current process has a later deadline time or can no longer meet deadline it will be preempted to 
+	allow the new process that can still meet its deadline time to be scheduled, which greatly improves the number of processes to meet deadline.
+
+
+OUTPUT
+	task-3.txt in the following format:
+	<process_name> <wait time> <turnaround time> <deadline met>
+
+EXAMPLE
+	./task3
+	content of processes.txt
+		P1 0 3 5
+		P2 1 6 7
+		P3 4 4 6
+		P4 6 2 2
+		
+	Output:
+		P1 0 3 1
+		P4 0 2 1
+		P3 0 6 1
+		P2 2 14 0
+		
+		As can be seen the processes which have their deadline met higher than both of the previous scheduling algorithms with the same input file.
+		
+	Stdout:
+		Time 0: P1 has entered the system.
+		Time 0: P1 is in the running state.
+		Time 1: P2 has entered the system.
+		Time 3: P1 has finished execution.
+		Time 3: P2 is in the running state.
+		Time 4: P3 has entered the system.
+		Time 4: P3 is in the running state.
+		Time 6: P4 has entered the system.
+		Time 6: P4 is in the running state.
+		Time 8: P4 has finished execution.
+		Time 8: P3 is in the running state.
+		Time 10: P3 has finished execution.
+		Time 10: P2 is in the running state.
+		Time 15: P2 has finished execution.
+
+	Explaination:
+		As time 0, P1 has arrived and the ready queue only contains P1, hence P1 is scheduled as the running process. Then, at time 2
+		P2 arrived, but P2 has a lower priority than P1 as P1 has a sooner deadline time (P1: 0 + 5 = 5, P2: 1 + 7 = 8). Hence, P1 continues
+		to execute, at time 3 P1 completes execution, and P2 is the only process in the ready queue, hence it is scheduled. At time 4, P3 has
+		arrived, (P2: 1 + 7 = 8, P3: 4 + 6 = 10, both processes), in this case though P2 has a higher priority due to closer deadline,
+		it has missed the opportunity to complete execution before the deadline time ( current_time + remainingTime <= entryTime + deadline == false)
+		Hence, P3 is scheduled before P2 as P3 can still be completed before the deadline if it is scheduled now.  (current_time + remainingTime <= entryTime + deadline).
+		At time 6, P4 has entered the system, and P4 is executed and P3 is preempted, this is because  p4 has a sooner deadline time than P3
+		such that, (P3: 4 + 6, P4: P4: 6 + 2), hence by switching to P4 , we can now complete P4 and P3 before deadline instead of just P3 
+		alone be completed before the deadline. After 2 seconds of execution from P4 it is switched back to P3 and P3 executes until it terminates
+		as P3 can still be completed before the deadline but P2 cannot so P2 is scheduled last. In the end, 3 processes has met their deadlines
+		unlike FCFS with the same input file where only a single process can be completed before the deadline is met and Shortest Process Remaining Next
+		of Quantum 3 that only manage to meet deadline for 2 processes. 
+	
+
+OVERVIEW
+	A "processes.txt" file must be placed under the same directory as task3.
+	
+AUTHOR
+	Written by Wong Jun Kang
