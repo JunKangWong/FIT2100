@@ -1,8 +1,8 @@
 /*
-Name			: Wong Jun Kang
-StudentID		: 29801036
-Date created	: 01/10/2021
-Last Modified	: 07/10/2021
+Name            : Wong Jun Kang
+StudentID       : 29801036
+Date created    : 01/10/2021
+Last Modified   : 07/10/2021
 
 First come first serve is chosen as the default method for task 1.
 Though changing the 3rd parameter into "SHORTEST_PROCESS_NEXT", will be

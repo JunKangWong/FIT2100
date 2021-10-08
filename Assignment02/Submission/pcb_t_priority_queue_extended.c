@@ -1,8 +1,8 @@
 /*
-Name			: Wong Jun Kang
-StudentID		: 29801036
-Date created	: 01/10/2021
-Last Modified	: 07/10/2021
+Name            : Wong Jun Kang
+StudentID       : 29801036
+Date created    : 01/10/2021
+Last Modified   : 07/10/2021
 
 Referenced and modified from:
 https://gist.github.com/kuriringohankamehameha/e793d66152ce95cecf0d05db04ec1ce8 

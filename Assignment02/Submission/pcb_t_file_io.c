@@ -1,8 +1,8 @@
 /*
-Name			: Wong Jun Kang
-StudentID		: 29801036
-Date created	: 01/10/2021
-Last Modified	: 07/10/2021
+Name            : Wong Jun Kang
+StudentID       : 29801036
+Date created    : 01/10/2021
+Last Modified   : 07/10/2021
 
 File io operations of pcb_t related items.
 */
